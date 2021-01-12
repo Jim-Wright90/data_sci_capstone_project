@@ -12,8 +12,9 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
-library(rio)
 library(here)
+library(janitor)
+library(rio)
 library(colorblindr)
 library(gghighlight)
 library(forcats)
@@ -23,7 +24,142 @@ library(knitr)
 library(kableExtra)
 library(reactable)
 library(plotly)
+library(glue)
+library(fs)
+library(rstatix)
+library(ggpubr)
+library(writexl)
+library(remotes)
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(color = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
 ```
+
+```{r, include=FALSE}
+#all clean sims data
+sims_concussion_data <- import(here("data", "sims_concussion_data.csv"),
+                               setclass = "tbl_df") 
+
+str(sims_concussion_data)
+
+sims_concussion_data <- sims_concussion_data %>% 
+  mutate_if(is.integer, as.numeric) 
+
+#impact data only
+
+one_impact_test <- import(here("data", "one_post_injury_impact_test.csv"),
+                               setclass = "tbl_df") 
+
+str(one_impact_test)
+
+one_impact_test <- one_impact_test %>% 
+  mutate_if(is.integer, as.numeric)
+
+str(one_impact_test)
+
+two_impact_test <- import(here("data", "two_post_injury_impact_test.csv"),
+                               setclass = "tbl_df") 
+
+two_impact_test <- two_impact_test %>% 
+  mutate_if(is.integer, as.numeric)
+
+three_impact_test <- import(here("data", "three_post_injury_impact_test.csv"),
+                               setclass = "tbl_df") 
+
+three_impact_test <- three_impact_test %>% 
+  mutate_if(is.integer, as.numeric)
+
+
+four_impact_test <- import(here("data", "four_post_injury_impact_test.csv"),
+                               setclass = "tbl_df") 
+
+four_impact_test <- four_impact_test %>% 
+  mutate_if(is.integer, as.numeric)
+
+str(four_impact_test)
+
+# impact sims merge data
+
+one_impact_sims <- import(here("data", "one_post_injury_test_impact_sims_merge.csv"),
+                               setclass = "tbl_df") 
+
+str(one_impact_sims)
+
+one_impact_sims <- one_impact_sims %>% 
+  mutate_if(is.integer, as.numeric)
+
+two_impact_sims <- import(here("data", "two_post_injury_test_impact_sims_merge.csv"),
+                               setclass = "tbl_df") 
+
+two_impact_sims <- two_impact_sims %>% 
+  mutate_if(is.integer, as.numeric)
+
+three_impact_sims <- import(here("data", "three_post_injury_test_impact_sims_merge.csv"),
+                               setclass = "tbl_df") 
+
+three_impact_sims <- three_impact_sims %>% 
+  mutate_if(is.integer, as.numeric)
+
+four_impact_sims <- import(here("data", "four_post_injury_test_impact_sims_merge.csv"),
+                               setclass = "tbl_df") 
+
+four_impact_sims <- four_impact_sims %>% 
+  mutate_if(is.integer, as.numeric)
+
+```
+
+```{r, include=FALSE}
+#helpful functions 
+
+mean_2 <- function(x) {
+  z <- na.omit(x)
+  sum(z) / length(z)
+}
+
+my_mean <- function(x) {
+  mean(x[x >= 0], na.rm = TRUE)
+}
+
+create_react_time <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+create_react <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+```
+
 
 Column {data-width=650}
 -----------------------------------------------------------------------
