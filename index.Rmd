@@ -41,75 +41,33 @@ theme_set(theme_minimal(15) +
 
 ```{r, include=FALSE}
 #all clean sims data
-sims_concussion_data <- import(here("data", "sims_concussion_data.csv"),
-                               setclass = "tbl_df") 
+sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
 
 str(sims_concussion_data)
 
-sims_concussion_data <- sims_concussion_data %>% 
-  mutate_if(is.integer, as.numeric) 
-
 #impact data only
 
-one_impact_test <- import(here("data", "one_post_injury_impact_test.csv"),
-                               setclass = "tbl_df") 
+one_impact_test <- read_csv(here("data", "one_post_injury_impact_test.csv"))
 
 str(one_impact_test)
 
-one_impact_test <- one_impact_test %>% 
-  mutate_if(is.integer, as.numeric)
+two_impact_test <- read_csv(here("data", "two_post_injury_impact_test.csv"))
 
-str(one_impact_test)
+three_impact_test <- read_csv(here("data", "three_post_injury_impact_test.csv"))
 
-two_impact_test <- import(here("data", "two_post_injury_impact_test.csv"),
-                               setclass = "tbl_df") 
-
-two_impact_test <- two_impact_test %>% 
-  mutate_if(is.integer, as.numeric)
-
-three_impact_test <- import(here("data", "three_post_injury_impact_test.csv"),
-                               setclass = "tbl_df") 
-
-three_impact_test <- three_impact_test %>% 
-  mutate_if(is.integer, as.numeric)
-
-
-four_impact_test <- import(here("data", "four_post_injury_impact_test.csv"),
-                               setclass = "tbl_df") 
-
-four_impact_test <- four_impact_test %>% 
-  mutate_if(is.integer, as.numeric)
-
-str(four_impact_test)
+four_impact_test <- read_csv(here("data", "four_post_injury_impact_test.csv"))
 
 # impact sims merge data
 
-one_impact_sims <- import(here("data", "one_post_injury_test_impact_sims_merge.csv"),
-                               setclass = "tbl_df") 
+one_impact_sims <- read_csv(here("data", "one_post_injury_test_impact_sims_merge.csv"))
 
 str(one_impact_sims)
 
-one_impact_sims <- one_impact_sims %>% 
-  mutate_if(is.integer, as.numeric)
+two_impact_sims <- read_csv(here("data", "two_post_injury_test_impact_sims_merge.csv"))
 
-two_impact_sims <- import(here("data", "two_post_injury_test_impact_sims_merge.csv"),
-                               setclass = "tbl_df") 
+three_impact_sims <- read_csv(here("data", "three_post_injury_test_impact_sims_merge.csv"))
 
-two_impact_sims <- two_impact_sims %>% 
-  mutate_if(is.integer, as.numeric)
-
-three_impact_sims <- import(here("data", "three_post_injury_test_impact_sims_merge.csv"),
-                               setclass = "tbl_df") 
-
-three_impact_sims <- three_impact_sims %>% 
-  mutate_if(is.integer, as.numeric)
-
-four_impact_sims <- import(here("data", "four_post_injury_test_impact_sims_merge.csv"),
-                               setclass = "tbl_df") 
-
-four_impact_sims <- four_impact_sims %>% 
-  mutate_if(is.integer, as.numeric)
-
+four_impact_sims <- read_csv(here("data", "four_post_injury_test_impact_sims_merge.csv"))
 ```
 
 ```{r, include=FALSE}
