@@ -1,0 +1,51 @@
+---
+title: "Educational Data Science Capstone Project"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    vertical_layout: scroll
+    theme: united
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(rio)
+library(here)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
