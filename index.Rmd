@@ -40,6 +40,13 @@ theme_set(theme_minimal(15) +
 ```
 
 ```{r, include=FALSE}
+# all impact data 
+
+impact_all <- read_csv(here("data", "impact_data.csv"))
+
+str(impact_all)
+
+
 #all clean sims data
 sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
 
@@ -68,6 +75,11 @@ two_impact_sims <- read_csv(here("data", "two_post_injury_test_impact_sims_merge
 three_impact_sims <- read_csv(here("data", "three_post_injury_test_impact_sims_merge.csv"))
 
 four_impact_sims <- read_csv(here("data", "four_post_injury_test_impact_sims_merge.csv"))
+
+# pcss items 
+
+pcss_items <- import(here("data", "pcss_items.xlsx"),
+               setclass = "tbl_df") 
 ```
 
 ```{r, include=FALSE}
@@ -126,31 +138,89 @@ create_react <- function(df, var) {
 
 The data for this capstone project was provided by the Hawaii Concussion Awareness and Management Program [(HCAMP)](https://hawaiiconcussion.com/), which is an organization affiliated with the University of Hawaii. The mission of HCAMP is to develop evidence-based interventions to manage concussion. 
 
-The specific goal of this project is to explore trends from two data sets. The first data set contains multiple years of test and symptom severity scores from the Immediate Post-Concussion Assessment and Cognitive Testing [(ImPACT)](https://impactconcussion.com/) software. The second data set contains multiple years of return-to-learn (RTL) and return-to-play (RTP) outcome data from the Hawaii Department of Education Student Information Management System (SIMS). The ImPACT data set is utilized to explore trends in symptom severity, as measured by the Post-Concussion Symptom Scale (PCSS), across individuals who completed post-injury testing following their concussion. The ImPACT data set is divided into four smaller data sets to represent individuals who completed one post-injury test, two post-injury tests, three post-injury tests, and four post-injury tests. Specific to this data set, the following research question is explored: Is there a significant difference between PCSS cluster symptom scores during the recovery process? 
+The specific goal of this project is to explore trends from two data sets. The first data set contains multiple years of test and symptom severity scores from the Immediate Post-Concussion Assessment and Cognitive Testing [(ImPACT)](https://impactconcussion.com/) software. The second data set contains multiple years of return-to-learn (RTL) and return-to-play (RTP) outcome data from the Hawaii Department of Education Student Information Management System (SIMS). The ImPACT data set is utilized to explore trends in symptom severity, as measured by the [Post-Concussion Symptom Scale (PCSS)](tools/Post-Concussion-Symptom-Scale1.pdf), across individuals who completed post-injury testing following their concussion. The ImPACT data set is divided into four smaller data sets to represent individuals who completed one post-injury test, two post-injury tests, three post-injury tests, and four post-injury tests. Specific to this data set, the following research question is explored: Is there a significant difference between PCSS cluster symptom scores during the recovery process? The six symptom clusters used for this project are adapted from Lumba-Brown et al. (2019) and Harmon et al. (2019). 
 
 The SIMS data set is utilized to explore trends in the duration of time to complete RTL and RTP protocols. The ImPACT and SIMS data sets have been joined corresponding to the number of post-injury tests completed from the ImPACT data set. Although the merger of these data sets did not yield a large number of observations to analyze, the following research question is explored: What is the relationship between symptom severity scores and RTL/RTP duration? 
 
-Column {data-width=650}
+
+Row 
 -----------------------------------------------------------------------
 
-### Chart A
+### ImPACT Test Totals
 
-```{r}
-
+```{r, include=FALSE}
+t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(9991,
+                                  5295,
+                                  2228,
+                                  780))
 ```
 
-Column {data-width=350}
+```{r, include=FALSE}
+t_sum_pi %>% 
+  reactable(columns = list(
+    Level = colDef(name = "Level",
+                   align = "center"),
+    Total = colDef(name = "Total", 
+                   align = "center",
+                   format = colFormat(separators = TRUE, suffix = " individuals"))),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE)
+```
+
+```{r, include=FALSE}
+pi_plot <- ggplot(t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",",
+                                                 scientific = FALSE)) +
+  coord_flip() +
+  theme(axis.text.x = element_text(angle = 45)) +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(pi_plot)
+```
+
+### PCSS Description 
+
+```{r}
+pcss_items %>% 
+  reactable(columns = list(
+    Item = colDef(name = "Item",
+                   align = "center"),
+    Symptom = colDef(name = "Symptom", 
+                   align = "center"),
+    Cluster = colDef(name = "Cluster",
+                     align = "center")),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE,
+    searchable = TRUE)
+```
+
+Row 
 -----------------------------------------------------------------------
 
-### Chart B
+### PCSS Description 
 
 ```{r}
 
 ```
 
-### Chart C
+
+### PCSS Description 
 
 ```{r}
 
 ```
-
