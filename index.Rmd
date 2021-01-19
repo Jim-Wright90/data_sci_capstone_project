@@ -136,10 +136,10 @@ create_react <- function(df, var) {
 
 # Data Overview 
 
-*_Data Description_* {.sidebar}
+Sidebar {.sidebar}
 ------------
 
-The data for this capstone project was provided by the Hawaii Concussion Awareness and Management Program [(HCAMP)](https://hawaiiconcussion.com/), which is an organization affiliated with the University of Hawaii. The mission of HCAMP is to develop evidence-based interventions to manage concussion. 
+**_Data Description:_** The data for this capstone project was provided by the Hawaii Concussion Awareness and Management Program [(HCAMP)](https://hawaiiconcussion.com/), which is an organization affiliated with the University of Hawaii. The mission of HCAMP is to develop evidence-based interventions to manage concussion. 
 
 The specific goal of this project is to explore trends from two data sets. The first data set contains multiple years of test and symptom severity scores from the Immediate Post-Concussion Assessment and Cognitive Testing [(ImPACT)](https://impactconcussion.com/) software. The second data set contains multiple years of return-to-learn (RTL) and return-to-play (RTP) outcome data from the Hawaii Department of Education Student Information Management System (SIMS). The ImPACT data set is utilized to explore trends in symptom severity, as measured by the [Post-Concussion Symptom Scale (PCSS)](tools/Post-Concussion-Symptom-Scale1.pdf), across individuals who completed post-injury testing following their concussion. The ImPACT data set is divided into four smaller data sets to represent individuals who completed one post-injury test, two post-injury tests, three post-injury tests, and four post-injury tests. Specific to this data set, the following research question is explored: Is there a significant difference between PCSS cluster symptom scores during the recovery process? The six symptom clusters used for this project are adapted from Lumba-Brown et al. (2019) and Harmon et al. (2019). 
 
@@ -473,7 +473,7 @@ rtl_smry_plot <- ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_3)) +
                 bins = 10) +
   facet_wrap(~gender, nrow = 1) +
   labs(x = "Days to Complete RTL",
-       y = "Individuals")
+       y = "")
 ```
 
 ```{r, include=TRUE}
@@ -496,9 +496,274 @@ rtp_smry_plot <- ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_7)) +
                 bins = 10) +
   facet_wrap(~gender, nrow = 1) +
   labs(x = "Days to Complete RTP",
-       y = "Individuals")
+       y = "")
 ```
 
 ```{r, include=TRUE}
 ggplotly(rtp_smry_plot)
+```
+
+
+# One Post-Injury Test 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 9,991 concussion cases where the individual completed one post-injury test during recovery. 
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Total Symptom Score Histogram 
+
+```{r, include=FALSE}
+head(one_impact_test)
+
+score_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 25) +
+    labs(x = "Symptom Severity",
+         y = "Number of Individuals")
+}
+
+gender_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 25) +
+    facet_wrap(~gender) +
+    labs(x = "Symptom Severity",
+         y = "")
+}
+
+```
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, total_symptom_score_post_injury_1))
+
+```
+
+### Total Symptom Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, total_symptom_score_post_injury_1)
+```
+
+### Total Symptom Score Summary - Gender 
+
+```{r, include=FALSE}
+gender_symptom_tbl <- function(df, x) {
+  df %>% 
+  group_by(gender) %>% 
+  summarize(mean = mean({{x}}),
+            sd = sd({{x}}),
+            min = min({{x}}),
+            max = max({{x}}),
+            total = length({{x}})) %>%
+  mutate(mean = as.numeric(mean),
+         sd = as.numeric(sd),
+         min = as.numeric(min),
+         max = as.numeric(max),
+         total = as.numeric(total)) %>% 
+  reactable(
+    columns = list(
+      gender = colDef(name = "Gender"),
+      mean = colDef(name = "Mean",
+                    format = colFormat(digits = 2, separators = TRUE)),
+      sd = colDef(name = "SD",
+                  format = colFormat(digits = 2, separators = TRUE)),
+      min = colDef(name = "Min",
+                   format = colFormat(separators = TRUE)),
+      max = colDef(name = "Max",
+                   format = colFormat(separators = TRUE)),
+      total = colDef(name = "Total",
+                   format = colFormat(separators = TRUE, suffix = " concussions"))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+
+gender_symptom_tbl(one_impact_test, total_symptom_score_post_injury_1)
+
+```
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, total_symptom_score_post_injury_1)
+```
+
+### Total Symptom Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, total_symptom_score_post_injury_1))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Headache-Migraine Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, headache_migraine_cluster_score_post_injury_1))
+```
+
+### Headache-Migraine Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Headache-Migraine Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Headache-Migraine Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, headache_migraine_cluster_score_post_injury_1))
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Cognitive Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, cognitive_cluster_score_post_injury_1))
+```
+
+### Cognitive Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, cognitive_cluster_score_post_injury_1)
+```
+
+### Cognitive Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, cognitive_cluster_score_post_injury_1)
+```
+
+### Cognitive Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, cognitive_cluster_score_post_injury_1))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Anxiety-Mood Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, anxiety_mood_cluster_score_post_injury_1))
+```
+
+### Anxiety-Mood Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Anxiety-Mood Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Anxiety-Mood Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, anxiety_mood_cluster_score_post_injury_1))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Ocular-Motor Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, ocular_motor_cluster_score_post_injury_1))
+```
+
+### Ocular-Motor Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Ocular-Motor Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Ocular-Motor Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, ocular_motor_cluster_score_post_injury_1))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Vestibular Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, vestibular_cluster_score_post_injury_1))
+```
+
+### Vestibular Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, vestibular_cluster_score_post_injury_1)
+```
+
+### Vestibular Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, vestibular_cluster_score_post_injury_1)
+```
+
+### Vestibular Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, vestibular_cluster_score_post_injury_1))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Sleep Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_test, sleep_cluster_score_post_injury_1))
+```
+
+### Sleep Cluster Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_test, sleep_cluster_score_post_injury_1)
+```
+
+### Sleep Cluster Score Summary - Gender 
+
+```{r, include=TRUE}
+gender_symptom_tbl(one_impact_test, sleep_cluster_score_post_injury_1)
+```
+
+### Sleep Score Gender Visual Comparison
+
+```{r, include=TRUE}
+ggplotly(gender_hist(one_impact_test, sleep_cluster_score_post_injury_1))
 ```
