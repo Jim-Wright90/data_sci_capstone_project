@@ -226,7 +226,7 @@ pcss_cluster_plot <- ggplot(pcss_cluster, aes(fct_reorder(Cluster, `Total Possib
                      breaks = c(0, 5, 10, 15, 20, 25, 30)) +
   coord_flip() +
   labs(x = "",
-       y = "Severity Score",
+       y = "Total Possible Severity Score",
        caption = "Total Possible Severity Score = 132")
 ```
 
