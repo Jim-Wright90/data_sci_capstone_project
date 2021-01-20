@@ -767,3 +767,1337 @@ gender_symptom_tbl(one_impact_test, sleep_cluster_score_post_injury_1)
 ```{r, include=TRUE}
 ggplotly(gender_hist(one_impact_test, sleep_cluster_score_post_injury_1))
 ```
+
+# Two Post-Injury Tests 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 5,295 concussion cases where the individual completed two post-injury tests during recovery. 
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Total Symptom Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, total_symptom_score_post_injury_1))
+```
+
+### Total Symptom Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, total_symptom_score_post_injury_1)
+```
+
+### Total Symptom Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, total_symptom_score_post_injury_2))
+```
+
+### Total Symptom Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, total_symptom_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+bxp_t_test <- function(df, x, y) {
+  ggplot(df, aes({{x}}, {{y}}, color = {{y}})) +
+    geom_boxplot() +
+    geom_jitter(position = position_jitter(0.2)) +
+    labs(x = "",
+         y = "Symptom Severity") +
+    theme(legend.position = "none") +
+    stat_compare_means(method = "t.test", paired = TRUE, hjust = -0.3)
+}
+
+two_impact_total_symptom_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 57, 58) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "total_symptom_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_total_symptom_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_total_symptom_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_total_symptom_score_1 <- two_impact_test$total_symptom_score_post_injury_1
+two_impact_test_total_symptom_score_2 <- two_impact_test$total_symptom_score_post_injury_2
+
+two_impact_test_total_symptom_score_res <- t.test(two_impact_test_total_symptom_score_1,
+                                                  two_impact_test_total_symptom_score_2,
+                                                  paired = TRUE)
+
+two_impact_test_total_symptom_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_total_symptom_score_res 
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Headache-Migraine Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, headache_migraine_cluster_score_post_injury_1))
+```
+
+### Headache-Migraine Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Headache-Migraine Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, headache_migraine_cluster_score_post_injury_2))
+```
+
+### Headache-Migraine Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, headache_migraine_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_headache_migraine_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 59, 60) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "headache_migraine_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_headache_migraine_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_headache_migraine_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_headache_migraine_cluster_score_1 <- two_impact_test$headache_migraine_cluster_score_post_injury_1
+
+two_impact_test_headache_migraine_cluster_score_2 <- two_impact_test$headache_migraine_cluster_score_post_injury_2
+
+two_impact_test_headache_migraine_cluster_score_res <- t.test(two_impact_test_headache_migraine_cluster_score_1,
+       two_impact_test_headache_migraine_cluster_score_2,
+       paired = TRUE)
+
+two_impact_test_headache_migraine_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_headache_migraine_cluster_score_res
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Cognitive Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, cognitive_cluster_score_post_injury_1))
+```
+
+### Cognitive Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, cognitive_cluster_score_post_injury_1)
+```
+
+### Cognitive Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, cognitive_cluster_score_post_injury_2))
+```
+
+### Cognitive Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, cognitive_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_cognitive_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 61, 62) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "cognitive_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_cognitive_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_cognitive_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_cognitive_cluster_score_1 <- two_impact_test$cognitive_cluster_score_post_injury_1
+
+two_impact_test_cognitive_cluster_score_2 <- two_impact_test$cognitive_cluster_score_post_injury_2
+
+two_impact_test_cognitive_cluster_score_res <- t.test(two_impact_test_cognitive_cluster_score_1,
+       two_impact_test_cognitive_cluster_score_2,
+       paired = TRUE)
+
+two_impact_test_cognitive_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_cognitive_cluster_score_res
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Anxiety-Mood Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, anxiety_mood_cluster_score_post_injury_1))
+```
+
+### Anxiety-Mood Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Anxiety-Mood Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, anxiety_mood_cluster_score_post_injury_2))
+```
+
+### Anxiety-Mood Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, anxiety_mood_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_anxiety_mood_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 63, 64) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "anxiety_mood_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_anxiety_mood_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_anxiety_mood_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_anxiety_mood_cluster_score_1 <- two_impact_test$anxiety_mood_cluster_score_post_injury_1
+
+two_impact_test_anxiety_mood_cluster_score_2 <- two_impact_test$anxiety_mood_cluster_score_post_injury_2
+
+two_impact_test_anxiety_mood_cluster_score_res <- t.test(two_impact_test_anxiety_mood_cluster_score_1,
+       two_impact_test_anxiety_mood_cluster_score_2,
+       paired = TRUE)
+
+two_impact_test_anxiety_mood_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_anxiety_mood_cluster_score_res
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Ocular-Motor Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, ocular_motor_cluster_score_post_injury_1))
+```
+
+### Ocular-Motor Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Ocular-Motor Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, ocular_motor_cluster_score_post_injury_2))
+```
+
+### Ocular-Motor Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, ocular_motor_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_ocular_motor_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 65, 66) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "ocular_motor_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_ocular_motor_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_ocular_motor_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_ocular_motor_cluster_score_1 <- two_impact_test$ocular_motor_cluster_score_post_injury_1
+
+two_impact_test_ocular_motor_cluster_score_2 <- two_impact_test$ocular_motor_cluster_score_post_injury_2
+
+two_impact_test_ocular_motor_cluster_score_res <- t.test(two_impact_test_ocular_motor_cluster_score_1,
+       two_impact_test_ocular_motor_cluster_score_2,
+       paired = TRUE)
+
+two_impact_test_ocular_motor_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_ocular_motor_cluster_score_res
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Vestibular Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, vestibular_cluster_score_post_injury_1))
+```
+
+### Vestibular Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, vestibular_cluster_score_post_injury_1)
+```
+
+### Vestibular Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, vestibular_cluster_score_post_injury_2))
+```
+
+### Vestibular Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, vestibular_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_vestibular_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 67, 68) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "vestibular_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_vestibular_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_vestibular_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_vestibular_cluster_score_1 <- two_impact_test$vestibular_cluster_score_post_injury_1
+
+two_impact_test_vestibular_cluster_score_2 <- two_impact_test$vestibular_cluster_score_post_injury_2
+
+two_impact_test_vestibular_cluster_score_res <- t.test(two_impact_test_vestibular_cluster_score_1,
+       two_impact_test_vestibular_cluster_score_2,
+       paired = TRUE)
+
+two_impact_test_vestibular_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_vestibular_cluster_score_res
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Sleep Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, sleep_cluster_score_post_injury_1))
+```
+
+### Sleep Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, sleep_cluster_score_post_injury_1)
+```
+
+### Sleep Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(two_impact_test, sleep_cluster_score_post_injury_2))
+```
+
+### Sleep Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(two_impact_test, sleep_cluster_score_post_injury_2)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+two_impact_sleep_cluster_score <- two_impact_test %>% 
+  select(2, 3, 4, 5, 69, 70) %>% 
+  pivot_longer(
+    cols = c(5:6),
+    names_to = "test",
+    names_prefix = "sleep_cluster_score_",
+    values_to = "score"
+  )
+
+bxp_t_test(two_impact_sleep_cluster_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_t_test(two_impact_sleep_cluster_score, test, score))
+```
+
+### *T*-Test Results 
+
+```{r, include=FALSE}
+two_impact_test_sleep_cluster_score_1 <- two_impact_test$sleep_cluster_score_post_injury_1
+
+two_impact_test_sleep_cluster_score_2 <- two_impact_test$sleep_cluster_score_post_injury_2
+
+two_impact_test_sleep_cluster_score_res <- t.test(two_impact_test_sleep_cluster_score_1,
+                                                  two_impact_test_sleep_cluster_score_2,
+                                                  paired = TRUE)
+       
+       
+
+two_impact_test_sleep_cluster_score_res 
+```
+
+```{r, include=TRUE}
+two_impact_test_sleep_cluster_score_res
+```
+
+# Three Post-Injury Tests 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 2,228 concussion cases where the individual completed three post-injury tests during recovery. 
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Total Symptom Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, total_symptom_score_post_injury_1))
+```
+
+### Total Symptom Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, total_symptom_score_post_injury_1)
+```
+
+### Total Symptom Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, total_symptom_score_post_injury_2))
+```
+
+### Total Symptom Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, total_symptom_score_post_injury_2)
+```
+
+### Total Symptom Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, total_symptom_score_post_injury_3))
+```
+
+### Total Symptom Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, total_symptom_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+bxp_anova <- function(df, x, y) {
+  ggplot(df, aes({{x}}, {{y}}, color = {{y}})) +
+    geom_boxplot() +
+    geom_jitter(position = position_jitter(0.2)) +
+    labs(x = "",
+         y = "Symptom Severity") +
+    theme(legend.position = "none") 
+}
+
+three_impact_total_symptom_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 83, 84, 85) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "total_symptom_score_",
+    values_to = "score"
+  )
+
+bxp_anova(three_impact_total_symptom_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_total_symptom_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_total_symptom_score_outliers <- three_impact_total_symptom_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+
+outlier_tbl <- function(df) {
+  df %>% 
+  reactable(
+    columns = list(
+      test = colDef(name = "Test",
+                    align = "center"),
+      score = colDef(name = "Score",
+                     align = "center"),
+      is.outlier = colDef(name = "Outlier Status",
+                          align = "center"),
+      is.extreme = colDef(name = "Extreme Outlier Status",
+                          align = "center")),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE,
+    searchable = TRUE
+  )
+}
+
+outlier_tbl(three_impact_total_symptom_score_outliers)
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_total_symptom_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_total_symptom_score_res <- anova_test(three_impact_total_symptom_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_total_symptom_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_total_symptom_score_pwc <- three_impact_total_symptom_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+
+three_impact_total_symptom_score_pwc
+```
+
+```{r, include=TRUE}
+three_impact_total_symptom_score_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Headache-Migraine Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, headache_migraine_cluster_score_post_injury_1))
+```
+
+### Headache-Migraine Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Headache-Migraine Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, headache_migraine_cluster_score_post_injury_2))
+```
+
+### Headache-Migraine Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, headache_migraine_cluster_score_post_injury_2)
+```
+
+### Headache-Migraine Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, headache_migraine_cluster_score_post_injury_3))
+```
+
+### Headache-Migraine Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, headache_migraine_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_headache_migraine_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 86, 87, 88) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "headache_migraine_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_headache_migraine_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_headache_migraine_cluster_score_outliers <- three_impact_headache_migraine_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_headache_migraine_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_headache_migraine_cluster_score_res <- anova_test(three_impact_headache_migraine_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_headache_migraine_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_headache_migraine_cluster_score_pwc <- three_impact_headache_migraine_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_headache_migraine_cluster_score_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Cognitive Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, cognitive_cluster_score_post_injury_1))
+```
+
+### Cognitive Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, cognitive_cluster_score_post_injury_1)
+```
+
+### Cognitive Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, cognitive_cluster_score_post_injury_2))
+```
+
+### Cognitive Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, cognitive_cluster_score_post_injury_2)
+```
+
+### Cognitive Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, cognitive_cluster_score_post_injury_3))
+```
+
+### Cognitive Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, cognitive_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_cognitive_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 89, 90, 91) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "cognitive_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_cognitive_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_cognitive_cluster_score_outliers <- three_impact_cognitive_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_cognitive_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_cognitive_cluster_score_res <- anova_test(three_impact_cognitive_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_cognitive_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_cognitive_cluster_score_pwc <- three_impact_cognitive_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_cognitive_cluster_score_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Anxiety-Mood Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, anxiety_mood_cluster_score_post_injury_1))
+```
+
+### Anxiety-Mood Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Anxiety-Mood Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, anxiety_mood_cluster_score_post_injury_2))
+```
+
+### Anxiety-Mood Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, anxiety_mood_cluster_score_post_injury_2)
+```
+
+### Anxiety-Mood Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, anxiety_mood_cluster_score_post_injury_3))
+```
+
+### Anxiety-Mood Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, anxiety_mood_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_anxiety_mood_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 92, 93, 94) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "anxiety_mood_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_anxiety_mood_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_anxiety_mood_cluster_score_outliers <- three_impact_anxiety_mood_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_anxiety_mood_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_anxiety_mood_cluster_score_res <- anova_test(three_impact_anxiety_mood_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_anxiety_mood_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_anxiety_mood_cluster_score_pwc <- three_impact_anxiety_mood_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_anxiety_mood_cluster_score_pwc %>% 
+  reactable()
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Ocular-Motor Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, ocular_motor_cluster_score_post_injury_1))
+```
+
+### Ocular-Motor Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Ocular-Motor Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, ocular_motor_cluster_score_post_injury_2))
+```
+
+### Ocular-Motor Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, ocular_motor_cluster_score_post_injury_2)
+```
+
+### Ocular-Motor Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, ocular_motor_cluster_score_post_injury_3))
+```
+
+### Ocular-Motor Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, ocular_motor_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_ocular_motor_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 95, 96, 97) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "ocular_motor_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_ocular_motor_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_ocular_motor_cluster_score_outliers <- three_impact_ocular_motor_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_ocular_motor_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_ocular_motor_cluster_score_res <- anova_test(three_impact_ocular_motor_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_ocular_motor_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_ocular_motor_cluster_score_pwc <- three_impact_ocular_motor_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_ocular_motor_cluster_score_pwc %>% 
+  reactable()
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Vestibular Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, vestibular_cluster_score_post_injury_1))
+```
+
+### Vestibular Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, vestibular_cluster_score_post_injury_1)
+```
+
+### Vestibular Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, vestibular_cluster_score_post_injury_2))
+```
+
+### Vestibular Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, vestibular_cluster_score_post_injury_2)
+```
+
+### Vestibular Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, vestibular_cluster_score_post_injury_3))
+```
+
+### Vestibular Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, vestibular_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_vestibular_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 98, 99, 100) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "vestibular_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_vestibular_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_vestibular_cluster_score_outliers <- three_impact_vestibular_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_vestibular_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_vestibular_cluster_score_res <- anova_test(three_impact_vestibular_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_vestibular_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_vestibular_cluster_score_pwc <- three_impact_vestibular_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_vestibular_cluster_score_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Sleep Cluster Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, sleep_cluster_score_post_injury_1))
+```
+
+### Sleep Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, sleep_cluster_score_post_injury_1)
+```
+
+### Sleep Cluster Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, sleep_cluster_score_post_injury_2))
+```
+
+### Sleep Cluster Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, sleep_cluster_score_post_injury_2)
+```
+
+### Sleep Cluster Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(three_impact_test, sleep_cluster_score_post_injury_3))
+```
+
+### Cognitive Cluster Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(three_impact_test, sleep_cluster_score_post_injury_3)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+three_impact_sleep_cluster_score <- three_impact_test %>% 
+  select(2, 3, 4, 5, 6, 101, 102, 103) %>% 
+  pivot_longer(
+    cols = c(6:8),
+    names_to = "test",
+    names_prefix = "sleep_cluster_score_",
+    values_to = "score"
+  )
+
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(three_impact_sleep_cluster_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+three_impact_sleep_cluster_score_outliers <- three_impact_sleep_cluster_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:6))
+```
+
+```{r, include=TRUE}
+outlier_tbl(three_impact_sleep_cluster_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+three_impact_sleep_cluster_score_res <- anova_test(three_impact_sleep_cluster_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(three_impact_sleep_cluster_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+three_impact_sleep_cluster_score_pwc <- three_impact_sleep_cluster_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+three_impact_sleep_cluster_score_pwc %>% 
+  reactable()
+```
+
+
+# Four Post-Injury Tests 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 780 concussion cases where the individual completed three post-injury tests during recovery. 
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Total Symptom Score Test 1 
+
+```{r, include=TRUE}
+ggplotly(score_hist(four_impact_test, total_symptom_score_post_injury_1))
+```
+
+### Total Symptom Score Test 1 Summary
+
+```{r, include=TRUE}
+create_react(four_impact_test, total_symptom_score_post_injury_1)
+```
+
+### Total Symptom Score Test 2 
+
+```{r, include=TRUE}
+ggplotly(score_hist(four_impact_test, total_symptom_score_post_injury_2))
+```
+
+### Total Symptom Score Test 2 Summary
+
+```{r, include=TRUE}
+create_react(four_impact_test, total_symptom_score_post_injury_2)
+```
+
+### Total Symptom Score Test 3 
+
+```{r, include=TRUE}
+ggplotly(score_hist(four_impact_test, total_symptom_score_post_injury_3))
+```
+
+### Total Symptom Score Test 3 Summary
+
+```{r, include=TRUE}
+create_react(four_impact_test, total_symptom_score_post_injury_3)
+```
+
+### Total Symptom Score Test 4 
+
+```{r, include=TRUE}
+ggplotly(score_hist(four_impact_test, total_symptom_score_post_injury_4))
+```
+
+### Total Symptom Score Test 4 Summary
+
+```{r, include=TRUE}
+create_react(four_impact_test, total_symptom_score_post_injury_4)
+```
+
+### Boxplot Comparison 
+
+```{r, include=FALSE}
+
+four_impact_total_symptom_score <- four_impact_test %>% 
+  select(2, 3, 4, 5, 6, 7, 109, 110, 111, 112) %>% 
+  pivot_longer(
+    cols = c(7:10),
+    names_to = "test",
+    names_prefix = "total_symptom_score_",
+    values_to = "score"
+  )
+
+bxp_anova(four_impact_total_symptom_score, test, score)
+```
+
+```{r, include=TRUE}
+ggplotly(bxp_anova(four_impact_total_symptom_score, test, score))
+```
+
+### Outliers 
+
+```{r, include=FALSE}
+four_impact_total_symptom_score_outliers <- four_impact_total_symptom_score %>% 
+  group_by(test) %>% 
+  identify_outliers(score) %>% 
+  select(-c(2:7))
+
+```
+
+```{r, include=TRUE}
+outlier_tbl(four_impact_total_symptom_score_outliers)
+```
+
+### ANOVA 
+
+```{r, include=FALSE}
+four_impact_total_symptom_score_res <- anova_test(four_impact_total_symptom_score, 
+                                   dv = score,
+                                   wid = passport_id, 
+                                   within = test)
+```
+
+```{r, include=TRUE}
+get_anova_table(four_impact_total_symptom_score_res)
+```
+
+### Pairwise Comparisons 
+
+```{r, include=FALSE}
+four_impact_total_symptom_score_pwc <- four_impact_total_symptom_score %>% 
+  pairwise_t_test(
+    score ~ test, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+```
+
+```{r, include=TRUE}
+four_impact_total_symptom_score_pwc %>% 
+  reactable()
+```
