@@ -775,6 +775,10 @@ Sidebar {.sidebar}
 
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 5,295 concussion cases where the individual completed two post-injury tests during recovery. 
 
+Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2 symptom severity. 
+
+
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -809,7 +813,7 @@ create_react(two_impact_test, total_symptom_score_post_injury_2)
 bxp_t_test <- function(df, x, y) {
   ggplot(df, aes({{x}}, {{y}}, color = {{y}})) +
     geom_boxplot() +
-    geom_jitter(position = position_jitter(0.2)) +
+    geom_jitter(position = position_jitter(0.15)) +
     labs(x = "",
          y = "Symptom Severity") +
     theme(legend.position = "none") +
@@ -842,7 +846,7 @@ two_impact_test_total_symptom_score_res <- t.test(two_impact_test_total_symptom_
                                                   two_impact_test_total_symptom_score_2,
                                                   paired = TRUE)
 
-two_impact_test_total_symptom_score_res 
+two_impact_test_total_symptom_score_res
 ```
 
 ```{r, include=TRUE}
@@ -1248,6 +1252,10 @@ Sidebar {.sidebar}
 
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 2,228 concussion cases where the individual completed three post-injury tests during recovery. 
 
+Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2 and post-injury 3 symptom severity. Additionally, differences in symptom cluster and total symptom severity scores were significantly different between post-injury 2 and post-injury 3.  
+
+
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
@@ -1365,7 +1373,8 @@ three_impact_total_symptom_score_res <- anova_test(three_impact_total_symptom_sc
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_total_symptom_score_res)
+get_anova_table(three_impact_total_symptom_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1377,7 +1386,8 @@ three_impact_total_symptom_score_pwc <- three_impact_total_symptom_score %>%
     p.adjust.method = "bonferroni"
   )
 
-three_impact_total_symptom_score_pwc
+three_impact_total_symptom_score_pwc <- three_impact_total_symptom_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1483,7 +1493,8 @@ three_impact_headache_migraine_cluster_score_res <- anova_test(three_impact_head
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_headache_migraine_cluster_score_res)
+get_anova_table(three_impact_headache_migraine_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1494,6 +1505,9 @@ three_impact_headache_migraine_cluster_score_pwc <- three_impact_headache_migrai
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_headache_migraine_cluster_score_pwc <- three_impact_headache_migraine_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1583,7 +1597,8 @@ three_impact_cognitive_cluster_score_res <- anova_test(three_impact_cognitive_cl
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_cognitive_cluster_score_res)
+get_anova_table(three_impact_cognitive_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1594,6 +1609,9 @@ three_impact_cognitive_cluster_score_pwc <- three_impact_cognitive_cluster_score
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_cognitive_cluster_score_pwc <- three_impact_cognitive_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1683,7 +1701,8 @@ three_impact_anxiety_mood_cluster_score_res <- anova_test(three_impact_anxiety_m
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_anxiety_mood_cluster_score_res)
+get_anova_table(three_impact_anxiety_mood_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1694,6 +1713,9 @@ three_impact_anxiety_mood_cluster_score_pwc <- three_impact_anxiety_mood_cluster
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_anxiety_mood_cluster_score_pwc <- three_impact_anxiety_mood_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1782,7 +1804,8 @@ three_impact_ocular_motor_cluster_score_res <- anova_test(three_impact_ocular_mo
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_ocular_motor_cluster_score_res)
+get_anova_table(three_impact_ocular_motor_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1793,6 +1816,9 @@ three_impact_ocular_motor_cluster_score_pwc <- three_impact_ocular_motor_cluster
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_ocular_motor_cluster_score_pwc <- three_impact_ocular_motor_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1881,7 +1907,8 @@ three_impact_vestibular_cluster_score_res <- anova_test(three_impact_vestibular_
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_vestibular_cluster_score_res)
+get_anova_table(three_impact_vestibular_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1892,6 +1919,9 @@ three_impact_vestibular_cluster_score_pwc <- three_impact_vestibular_cluster_sco
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_vestibular_cluster_score_pwc <- three_impact_vestibular_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -1933,7 +1963,7 @@ create_react(three_impact_test, sleep_cluster_score_post_injury_2)
 ggplotly(score_hist(three_impact_test, sleep_cluster_score_post_injury_3))
 ```
 
-### Cognitive Cluster Score Test 3 Summary
+### Sleep Cluster Score Test 3 Summary
 
 ```{r, include=TRUE}
 create_react(three_impact_test, sleep_cluster_score_post_injury_3)
@@ -1981,7 +2011,8 @@ three_impact_sleep_cluster_score_res <- anova_test(three_impact_sleep_cluster_sc
 ```
 
 ```{r, include=TRUE}
-get_anova_table(three_impact_sleep_cluster_score_res)
+get_anova_table(three_impact_sleep_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -1992,6 +2023,9 @@ three_impact_sleep_cluster_score_pwc <- three_impact_sleep_cluster_score %>%
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+three_impact_sleep_cluster_score_pwc <- three_impact_sleep_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2006,6 +2040,9 @@ Sidebar {.sidebar}
 ------------
 
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 780 concussion cases where the individual completed three post-injury tests during recovery. 
+
+Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2, post-injury 3, and post-injury 4 symptom severity. Additionally, differences in symptom cluster and total symptom severity scores were significantly different between post-injury 2, post-injury 3, and post-injury 4 with the exception of one pairwise comparison (ocular-motor symptom cluster severity between post-injury 3 and post-injury 4).  
+
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -2102,7 +2139,8 @@ four_impact_total_symptom_score_res <- anova_test(four_impact_total_symptom_scor
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_total_symptom_score_res)
+get_anova_table(four_impact_total_symptom_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2113,6 +2151,9 @@ four_impact_total_symptom_score_pwc <- four_impact_total_symptom_score %>%
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_total_symptom_score_pwc <- four_impact_total_symptom_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2216,7 +2257,8 @@ four_impact_headache_migraine_cluster_score_res <- anova_test(four_impact_headac
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_headache_migraine_cluster_score_res)
+get_anova_table(four_impact_headache_migraine_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2227,6 +2269,9 @@ four_impact_headache_migraine_cluster_score_pwc <- four_impact_headache_migraine
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_headache_migraine_cluster_score_pwc <- four_impact_headache_migraine_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2329,7 +2374,8 @@ four_impact_cognitive_cluster_score_res <- anova_test(four_impact_cognitive_clus
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_cognitive_cluster_score_res)
+get_anova_table(four_impact_cognitive_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2340,6 +2386,9 @@ four_impact_cognitive_cluster_score_pwc <- four_impact_cognitive_cluster_score %
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_cognitive_cluster_score_pwc <- four_impact_cognitive_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2443,7 +2492,8 @@ four_impact_anxiety_mood_cluster_score_res <- anova_test(four_impact_anxiety_moo
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_anxiety_mood_cluster_score_res)
+get_anova_table(four_impact_anxiety_mood_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2454,6 +2504,9 @@ four_impact_anxiety_mood_cluster_score_pwc <- four_impact_anxiety_mood_cluster_s
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_anxiety_mood_cluster_score_pwc <- four_impact_anxiety_mood_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2556,7 +2609,8 @@ four_impact_ocular_motor_cluster_score_res <- anova_test(four_impact_ocular_moto
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_ocular_motor_cluster_score_res)
+get_anova_table(four_impact_ocular_motor_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2567,6 +2621,9 @@ four_impact_ocular_motor_cluster_score_pwc <- four_impact_ocular_motor_cluster_s
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_ocular_motor_cluster_score_pwc <- four_impact_anxiety_mood_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2669,7 +2726,8 @@ four_impact_vestibular_cluster_score_res <- anova_test(four_impact_vestibular_cl
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_vestibular_cluster_score_res)
+get_anova_table(four_impact_vestibular_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2680,6 +2738,9 @@ four_impact_vestibular_cluster_score_pwc <- four_impact_vestibular_cluster_score
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_vestibular_cluster_score_pwc <- four_impact_vestibular_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
@@ -2782,7 +2843,8 @@ four_impact_sleep_cluster_score_res <- anova_test(four_impact_sleep_cluster_scor
 ```
 
 ```{r, include=TRUE}
-get_anova_table(four_impact_sleep_cluster_score_res)
+get_anova_table(four_impact_sleep_cluster_score_res) %>% 
+  reactable()
 ```
 
 ### Pairwise Comparisons 
@@ -2793,6 +2855,9 @@ four_impact_sleep_cluster_score_pwc <- four_impact_sleep_cluster_score %>%
     score ~ test, paired = TRUE,
     p.adjust.method = "bonferroni"
   )
+
+four_impact_sleep_cluster_score_pwc <- four_impact_sleep_cluster_score_pwc %>% 
+  mutate_at(vars(statistic), list(~ round(., 2)))
 ```
 
 ```{r, include=TRUE}
