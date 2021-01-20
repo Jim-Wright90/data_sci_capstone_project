@@ -1322,7 +1322,7 @@ ggplotly(bxp_anova(three_impact_total_symptom_score, test, score))
 three_impact_total_symptom_score_outliers <- three_impact_total_symptom_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 
 outlier_tbl <- function(df) {
   df %>% 
@@ -1330,6 +1330,8 @@ outlier_tbl <- function(df) {
     columns = list(
       test = colDef(name = "Test",
                     align = "center"),
+      passport_id = colDef(name = "Passport ID",
+                           align = "center"),
       score = colDef(name = "Score",
                      align = "center"),
       is.outlier = colDef(name = "Outlier Status",
@@ -1464,7 +1466,7 @@ ggplotly(bxp_anova(three_impact_headache_migraine_cluster_score, test, score))
 three_impact_headache_migraine_cluster_score_outliers <- three_impact_headache_migraine_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -1564,7 +1566,7 @@ ggplotly(bxp_anova(three_impact_cognitive_cluster_score, test, score))
 three_impact_cognitive_cluster_score_outliers <- three_impact_cognitive_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -1664,7 +1666,7 @@ ggplotly(bxp_anova(three_impact_anxiety_mood_cluster_score, test, score))
 three_impact_anxiety_mood_cluster_score_outliers <- three_impact_anxiety_mood_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -1763,7 +1765,7 @@ ggplotly(bxp_anova(three_impact_ocular_motor_cluster_score, test, score))
 three_impact_ocular_motor_cluster_score_outliers <- three_impact_ocular_motor_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -1862,7 +1864,7 @@ ggplotly(bxp_anova(three_impact_vestibular_cluster_score, test, score))
 three_impact_vestibular_cluster_score_outliers <- three_impact_vestibular_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -1962,7 +1964,7 @@ ggplotly(bxp_anova(three_impact_sleep_cluster_score, test, score))
 three_impact_sleep_cluster_score_outliers <- three_impact_sleep_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:6))
+  select(1, 3, 7, 8, 9)
 ```
 
 ```{r, include=TRUE}
@@ -2082,7 +2084,7 @@ ggplotly(bxp_anova(four_impact_total_symptom_score, test, score))
 four_impact_total_symptom_score_outliers <- four_impact_total_symptom_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2196,7 +2198,7 @@ ggplotly(bxp_anova(four_impact_headache_migraine_cluster_score, test, score))
 four_impact_headache_migraine_cluster_score_outliers <- four_impact_headache_migraine_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2309,7 +2311,7 @@ ggplotly(bxp_anova(four_impact_cognitive_cluster_score, test, score))
 four_impact_cognitive_cluster_score_outliers <- four_impact_cognitive_cluster_score %>% 
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2423,7 +2425,7 @@ ggplotly(bxp_anova(four_impact_anxiety_mood_cluster_score, test, score))
 four_impact_anxiety_mood_cluster_score_outliers <- four_impact_anxiety_mood_cluster_score %>%
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2536,7 +2538,7 @@ ggplotly(bxp_anova(four_impact_ocular_motor_cluster_score, test, score))
 four_impact_ocular_motor_cluster_score_outliers <- four_impact_ocular_motor_cluster_score %>%
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2649,7 +2651,7 @@ ggplotly(bxp_anova(four_impact_vestibular_cluster_score, test, score))
 four_impact_vestibular_cluster_score_outliers <- four_impact_vestibular_cluster_score %>%
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
@@ -2762,7 +2764,7 @@ ggplotly(bxp_anova(four_impact_sleep_cluster_score, test, score))
 four_impact_sleep_cluster_score_outliers <- four_impact_sleep_cluster_score %>%
   group_by(test) %>% 
   identify_outliers(score) %>% 
-  select(-c(2:7))
+  select(1, 3, 8, 9, 10)
 
 ```
 
