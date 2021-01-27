@@ -1,4 +1,5 @@
 nopublish/*
+.DS_Store/*
 
 # History files
 .Rhistory
