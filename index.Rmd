@@ -134,7 +134,7 @@ create_react <- function(df, var) {
 ```
 
 
-# Data Overview 
+# Overview 
 
 Sidebar {.sidebar}
 ------------
@@ -504,7 +504,7 @@ ggplotly(rtp_smry_plot)
 ```
 
 
-# One Post-Injury Test 
+# One Test 
 
 Sidebar {.sidebar}
 ------------
@@ -768,7 +768,7 @@ gender_symptom_tbl(one_impact_test, sleep_cluster_score_post_injury_1)
 ggplotly(gender_hist(one_impact_test, sleep_cluster_score_post_injury_1))
 ```
 
-# Two Post-Injury Tests 
+# Two Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -1245,7 +1245,7 @@ two_impact_test_sleep_cluster_score_res
 two_impact_test_sleep_cluster_score_res
 ```
 
-# Three Post-Injury Tests 
+# Three Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -2034,7 +2034,7 @@ three_impact_sleep_cluster_score_pwc %>%
 ```
 
 
-# Four Post-Injury Tests 
+# Four Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -2863,4 +2863,169 @@ four_impact_sleep_cluster_score_pwc <- four_impact_sleep_cluster_score_pwc %>%
 ```{r, include=TRUE}
 four_impact_sleep_cluster_score_pwc %>% 
   reactable()
+```
+
+
+# Merged Data 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** 
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Data Breakdown 
+
+```{r, include=FALSE}
+sims_t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(254,
+                                  336,
+                                  133,
+                                  32))
+
+```
+
+```{r, include=FALSE}
+sims_pi_plot <- ggplot(sims_t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  coord_flip() +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(sims_pi_plot)
+```
+
+### One Test RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### One Test RTL Plot 
+
+```{r, include=FALSE}
+rtl_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTL",
+       y = "")
+}
+
+rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3)
+
+rtp_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTP",
+       y = "")
+}
+
+rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7)
+
+```
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### One Test RTP Summary
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### One Test RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+### Two Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Two Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(two_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Two Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Two Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(two_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+
+### Three Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Three Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(three_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Three Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Three Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(three_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+### Four Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Four Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(four_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Four Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Four Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(four_impact_sims, dys_btwn_onset_rtp_7))
 ```
