@@ -134,7 +134,7 @@ create_react <- function(df, var) {
 ```
 
 
-# Overview 
+# Data Overview 
 
 Sidebar {.sidebar}
 ------------
@@ -145,7 +145,7 @@ The specific goal of this project is to explore trends from two data sets. The f
 
 The SIMS data set is utilized to explore trends in the duration of time to complete RTL and RTP protocols. The ImPACT and SIMS data sets have been joined corresponding to the number of post-injury tests completed from the ImPACT data set. Although the merger of these data sets did not yield a large number of observations to analyze, the following research question is explored: What is the relationship between symptom severity scores and RTL/RTP duration? 
 
-The top row of the *Data Overview* tab displays information on the number of individuals who completed multiple ImPACT tests as well as information on the PCSS. The bottom row displays information on the complete SIMS data set, consisting of individuals who experienced a documented concussion and were tracked for recovery during the RTL and RTP process. 
+The top row of the *Data Overview* tab displays information on the number of individuals who completed multiple ImPACT tests as well as information on the PCSS. The second row displays information on the complete SIMS data set, consisting of individuals who experienced a documented concussion and were tracked for recovery during the RTL and RTP process. The bottom row displays summary information for RTL/RTP duration times of the merged ImPACT and SIMS data sets, where the data is structured to communicate RTL/RTP duration times dependent on the number of post-injury tests completed by the individual. 
 
 
 Row {.tabset}
@@ -503,8 +503,165 @@ rtp_smry_plot <- ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_7)) +
 ggplotly(rtp_smry_plot)
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
 
-# One Test 
+### Data Breakdown 
+
+```{r, include=FALSE}
+sims_t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(254,
+                                  336,
+                                  133,
+                                  32))
+
+```
+
+```{r, include=FALSE}
+sims_pi_plot <- ggplot(sims_t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  coord_flip() +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(sims_pi_plot)
+```
+
+### One Test RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### One Test RTL Plot 
+
+```{r, include=FALSE}
+rtl_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTL",
+       y = "")
+}
+
+rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3)
+
+rtp_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTP",
+       y = "")
+}
+
+rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7)
+
+```
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### One Test RTP Summary
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### One Test RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+### Two Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Two Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(two_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Two Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Two Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(two_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+
+### Three Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Three Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(three_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Three Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Three Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(three_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+### Four Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Four Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(four_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Four Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Four Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(four_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+
+
+# One Post-Injury Test 
 
 Sidebar {.sidebar}
 ------------
@@ -768,7 +925,95 @@ gender_symptom_tbl(one_impact_test, sleep_cluster_score_post_injury_1)
 ggplotly(gender_hist(one_impact_test, sleep_cluster_score_post_injury_1))
 ```
 
-# Two Tests 
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Merged Total Symptom Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, total_symptom_score_post_injury_1))
+```
+
+### Merged Total Symptom Score Summary
+
+```{r, include=TRUE}
+create_react(one_impact_sims, total_symptom_score_post_injury_1)
+```
+
+### Merged Headache-Migraine Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, headache_migraine_cluster_score_post_injury_1))
+```
+
+### Merged Headache-Migraine Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Merged Cognitive Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, cognitive_cluster_score_post_injury_1))
+```
+
+### Merged Cognitive Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, cognitive_cluster_score_post_injury_1)
+```
+
+### Merged Anxiety-Mood Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, anxiety_mood_cluster_score_post_injury_1))
+```
+
+### Merged Anxiety-Mood Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Merged Ocular-Motor Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, ocular_motor_cluster_score_post_injury_1))
+```
+
+### Merged Ocular-Motor Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Merged Vestibular Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, vestibular_cluster_score_post_injury_1))
+```
+
+### Merged Vestibular Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, vestibular_cluster_score_post_injury_1)
+```
+
+### Merged Sleep Cluster Score Histogram 
+
+```{r, include=TRUE}
+ggplotly(score_hist(one_impact_sims, sleep_cluster_score_post_injury_1))
+```
+
+### Merged Sleep Cluster Score Summary 
+
+```{r, include=TRUE}
+create_react(one_impact_sims, sleep_cluster_score_post_injury_1)
+```
+
+
+# Two Post-Injury Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -1245,7 +1490,7 @@ two_impact_test_sleep_cluster_score_res
 two_impact_test_sleep_cluster_score_res
 ```
 
-# Three Tests 
+# Three Post-Injury Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -2034,7 +2279,7 @@ three_impact_sleep_cluster_score_pwc %>%
 ```
 
 
-# Four Tests 
+# Four Post-Injury Tests 
 
 Sidebar {.sidebar}
 ------------
@@ -2866,166 +3111,3 @@ four_impact_sleep_cluster_score_pwc %>%
 ```
 
 
-# Merged Data 
-
-Sidebar {.sidebar}
-------------
-
-**_Description:_** 
-
-
-Row {.tabset}
------------------------------------------------------------------------
-
-### Data Breakdown 
-
-```{r, include=FALSE}
-sims_t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
-                                  "Two Post-Injury Tests",
-                                  "Three Post-Injury Tests",
-                                  "Four Post-Injury Tests"),
-                      "Total" = c(254,
-                                  336,
-                                  133,
-                                  32))
-
-```
-
-```{r, include=FALSE}
-sims_pi_plot <- ggplot(sims_t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
-  geom_col(fill = "blue",
-           alpha = 0.7) +
-  coord_flip() +
-  labs(x = "",
-       y = "Individuals")
-```
-
-```{r, include=TRUE}
-ggplotly(sims_pi_plot)
-```
-
-### One Test RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(one_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### One Test RTL Plot 
-
-```{r, include=FALSE}
-rtl_hist <- function(df, x) {
-  ggplot(df, aes({{x}})) +
-  geom_histogram(fill = "#56B4E9",
-                color = "white", 
-                alpha = 0.9,
-                bins = 10) +
-  facet_wrap(~gender, nrow = 1) +
-  labs(x = "Days to Complete RTL",
-       y = "")
-}
-
-rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3)
-
-rtp_hist <- function(df, x) {
-  ggplot(df, aes({{x}})) +
-  geom_histogram(fill = "#56B4E9",
-                color = "white", 
-                alpha = 0.9,
-                bins = 10) +
-  facet_wrap(~gender, nrow = 1) +
-  labs(x = "Days to Complete RTP",
-       y = "")
-}
-
-rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7)
-
-```
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### One Test RTP Summary
-
-```{r, include=TRUE}
-create_react_time(one_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### One Test RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-### Two Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(two_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Two Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(two_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Two Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(two_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Two Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(two_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-
-### Three Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(three_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Three Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(three_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Three Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(three_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Three Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(three_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-### Four Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(four_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Four Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(four_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Four Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(four_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Four Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(four_impact_sims, dys_btwn_onset_rtp_7))
-```
