@@ -579,16 +579,22 @@ gender_symptom_tbl <- function(df, x) {
          total = as.numeric(total)) %>% 
   reactable(
     columns = list(
-      gender = colDef(name = "Gender"),
+      gender = colDef(name = "Gender",
+                      align = "center"),
       mean = colDef(name = "Mean",
+                    align = "center",
                     format = colFormat(digits = 2, separators = TRUE)),
       sd = colDef(name = "SD",
+                  align = "center",
                   format = colFormat(digits = 2, separators = TRUE)),
       min = colDef(name = "Min",
+                   align = "center",
                    format = colFormat(separators = TRUE)),
       max = colDef(name = "Max",
+                   align = "center",
                    format = colFormat(separators = TRUE)),
       total = colDef(name = "Total",
+                     align = "center",
                    format = colFormat(separators = TRUE, suffix = " concussions"))),
     pagination = TRUE,
     striped = TRUE,
@@ -3364,8 +3370,11 @@ create_react(four_impact_sims, sleep_cluster_score_post_injury_4)
 Sidebar {.sidebar}
 ------------
 
-**_Description:_** This tab provides summaries and visualizations for RTL and RTP duration time structured by the number of post-injury tests completed by the individual. The top row displays how many individuals completed either one, two, three, or four post-injury tests during their recovery and also describes the RTP protocol and requirements to comlpete the RTL step. 
+**_Description:_** This tab provides summaries and visualizations for RTL and RTP duration time structured by the number of post-injury tests completed by the individual. The top row displays how many individuals completed either one, two, three, or four post-injury tests during their recovery and also describes the RTP protocol and requirements to complete the RTL step. 
 
+One-way ANOVA's were utilized to evaluate mean differences in RTL duration, RTP duration, and symptom severity at the time of post-injury 1 testing between individuals who completed one post-injury test, two post-injury tests, three post-injury tests, and four post-injury tests. Differences between RTL and RTP duration time were significant. Pairwise comparisons with a Bonferroni correction identified that all comparisons were significant except for the difference in mean duration time to complete RTL and RTP between individuals who completed one post-injury test and two post-injury tests. Individuals who completed three and four post-injury tests were observed to require a significantly longer duration of time to complete both RTL and RTP than individuals who completed one and two post-injury tests. 
+
+Differences in mean post-injury 1 symptom severity ratings between individuals, based on the number of post-injury tests completed, were significant or approximating significance for the following symptom clusters: Total Symptom score, Headache-Migraine Cluster, Cognitive Cluster, and the Vestibular Cluster. Pairwise comparisons with a Bonferroni correction identified that all comparisons were significant across all post-injury 1 symptom severity ratings except for the difference in mean symptom severity between individuals who completed one post-injury test and two post-injury tests. Across symptom severity ratings with significant differences at the time of post-injury 1 testing, individuals who completed three and four post-injury tests were observed to report significantly higher symptom severity ratings than individuals who completed one and two post-injury tests.
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -3701,6 +3710,57 @@ tst_aov_pwc %>%
 # anova code above can be used for all outcome variables to compare between test groups
 ```
 
+### RTL Summary 
+
+```{r, include=FALSE}
+time_smry_tbl <- function(df, x) {
+  df %>% 
+  group_by(number_tests) %>% 
+  summarize(mean = mean({{x}}),
+            sd = sd({{x}}),
+            min = min({{x}}),
+            max = max({{x}}),
+            total = length({{x}})) %>%
+  mutate(mean = as.numeric(mean),
+         sd = as.numeric(sd),
+         min = as.numeric(min),
+         max = as.numeric(max),
+         total = as.numeric(total)) %>% 
+  reactable(
+    columns = list(
+      number_tests = colDef(name = "Number of Tests Completed",
+                            align = "center"),
+      mean = colDef(name = "Mean",
+                    align = "center",
+                    format = colFormat(digits = 2, separators = TRUE, suffix = " days")),
+      sd = colDef(name = "SD",
+                  align = "center",
+                  format = colFormat(digits = 2, separators = TRUE, suffix = " days")),
+      min = colDef(name = "Min",
+                   align = "center",
+                   format = colFormat(separators = TRUE, suffix = " days")),
+      max = colDef(name = "Max",
+                   align = "center",
+                   format = colFormat(separators = TRUE, suffix = " days")),
+      total = colDef(name = "Total",
+                     align = "center",
+                   format = colFormat(separators = TRUE, suffix = " concussions"))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+
+
+```
+
+```{r, include=TRUE}
+time_smry_tbl(all_impact_sims_bind, dys_btwn_onset_rtp_3)
+```
+
 ### RTL Boxplot Comparison 
 
 ```{r, include=FALSE}
@@ -3750,6 +3810,11 @@ rtl_aov_pwc %>%
   reactable()
 ```
 
+### RTP Summary 
+
+```{r, include=TRUE}
+time_smry_tbl(all_impact_sims_bind, dys_btwn_onset_rtp_7)
+```
 
 ### RTP Boxplot Comparison 
 
@@ -3802,6 +3867,58 @@ rtp_aov_pwc %>%
 
 Row {.tabset}
 -----------------------------------------------------------------------
+
+### Total Symptom Score Test 1 Summary 
+
+```{r, include=FALSE}
+symptom_smry_tbl <- function(df, x) {
+  df %>% 
+  group_by(number_tests) %>% 
+  summarize(mean = mean({{x}}),
+            sd = sd({{x}}),
+            min = min({{x}}),
+            max = max({{x}}),
+            total = length({{x}})) %>%
+  mutate(mean = as.numeric(mean),
+         sd = as.numeric(sd),
+         min = as.numeric(min),
+         max = as.numeric(max),
+         total = as.numeric(total)) %>% 
+  reactable(
+    columns = list(
+      number_tests = colDef(name = "Number of Tests Completed",
+                            align = "center"),
+      mean = colDef(name = "Mean",
+                    align = "center",
+                    format = colFormat(digits = 2, separators = TRUE)),
+      sd = colDef(name = "SD",
+                  align = "center",
+                  format = colFormat(digits = 2, separators = TRUE)),
+      min = colDef(name = "Min",
+                   align = "center",
+                   format = colFormat(separators = TRUE)),
+      max = colDef(name = "Max",
+                   align = "center",
+                   format = colFormat(separators = TRUE)),
+      total = colDef(name = "Total",
+                     align = "center",
+                   format = colFormat(separators = TRUE, suffix = " concussions"))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+
+```
+
+### Total Symptom Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, total_symptom_score_post_injury_1)
+```
 
 ### Total Symptom Score Test 1 Boxplot Comparison 
 
@@ -3857,6 +3974,12 @@ total_symptom_score_aov_pwc %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
+### Headache-Migraine Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, headache_migraine_cluster_score_post_injury_1)
+```
+
 ### Headache-Migraine Cluster Score Test 1 Boxplot Comparison 
 
 ```{r, include=TRUE}
@@ -3900,6 +4023,12 @@ headache_migraine_cluster_score_aov_pwc %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
+### Cognitive Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, cognitive_cluster_score_post_injury_1)
+```
+
 ### Cognitive Cluster Score Test 1 Boxplot Comparison 
 
 ```{r, include=TRUE}
@@ -3942,6 +4071,12 @@ cognitive_cluster_score_aov_pwc %>%
 
 Row {.tabset}
 -----------------------------------------------------------------------
+
+### Anxiety-Mood Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, anxiety_mood_cluster_score_post_injury_1)
+```
 
 ### Anxiety-Mood Cluster Score Test 1 Boxplot Comparison 
 
@@ -3987,6 +4122,12 @@ anxiety_mood_cluster_score_aov_pwc %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
+### Ocular-Motor Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, ocular_motor_cluster_score_post_injury_1)
+```
+
 ### Ocular-Motor Cluster Score Test 1 Boxplot Comparison 
 
 ```{r, include=TRUE}
@@ -4031,6 +4172,12 @@ ocular_motor_cluster_score_aov_pwc %>%
 Row {.tabset}
 -----------------------------------------------------------------------
 
+### Vestibular Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, vestibular_cluster_score_post_injury_1)
+```
+
 ### Vestibular Cluster Score Test 1 Boxplot Comparison 
 
 ```{r, include=TRUE}
@@ -4074,6 +4221,12 @@ vestibular_cluster_score_aov_pwc %>%
 
 Row {.tabset}
 -----------------------------------------------------------------------
+
+### Sleep Cluster Score Test 1 Summary
+
+```{r, include=TRUE}
+symptom_smry_tbl(all_impact_sims_bind, sleep_cluster_score_post_injury_1)
+```
 
 ### Sleep Cluster Score Test 1 Boxplot Comparison 
 
