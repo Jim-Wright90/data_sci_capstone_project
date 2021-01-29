@@ -3701,4 +3701,417 @@ tst_aov_pwc %>%
 # anova code above can be used for all outcome variables to compare between test groups
 ```
 
+### RTL Boxplot Comparison 
+
+```{r, include=FALSE}
+rtl_bxp <- ggplot(all_impact_sims_bind, aes(number_tests, dys_btwn_onset_rtp_3,
+                                 color = dys_btwn_onset_rtp_3)) +
+  geom_boxplot() +
+  geom_jitter(position = position_jitter(0.15)) +
+  labs(x = "Number of Tests Completed",
+       y = "Number of Days") +
+  theme(legend.position = "none")
+```
+
+```{r, include=TRUE}
+ggplotly(rtl_bxp)
+```
+
+### RTL ANOVA 
+
+```{r, include=FALSE}
+
+rtl_aov <- aov(dys_btwn_onset_rtp_3 ~ number_tests, data = all_impact_sims_bind)
+
+summary(rtl_aov) 
+
+rtl_aov
+```
+
+```{r, include=TRUE}
+summary(rtl_aov)
+```
+
+### RTL Pairwise Comparisons 
+
+```{r, include=FALSE}
+rtl_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    dys_btwn_onset_rtp_3 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+rtl_aov_pwc <- rtl_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+rtl_aov_pwc %>% 
+  reactable()
+```
+
+
+### RTP Boxplot Comparison 
+
+```{r, include=FALSE}
+rtp_bxp <- ggplot(all_impact_sims_bind, aes(number_tests, dys_btwn_onset_rtp_7,
+                                 color = dys_btwn_onset_rtp_7)) +
+  geom_boxplot() +
+  geom_jitter(position = position_jitter(0.15)) +
+  labs(x = "Number of Tests Completed",
+       y = "Number of Days") +
+  theme(legend.position = "none")
+```
+
+```{r, include=TRUE}
+ggplotly(rtp_bxp)
+```
+
+### RTP ANOVA 
+
+```{r, include=FALSE}
+
+rtp_aov <- aov(dys_btwn_onset_rtp_7 ~ number_tests, data = all_impact_sims_bind)
+
+summary(rtp_aov) 
+
+```
+
+```{r, include=TRUE}
+summary(rtp_aov)
+```
+
+### RTP Pairwise Comparisons 
+
+```{r, include=FALSE}
+rtp_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    dys_btwn_onset_rtp_7 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+rtp_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+rtp_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Total Symptom Score Test 1 Boxplot Comparison 
+
+```{r, include=FALSE}
+
+test_1_bxp <- function(df, x, y) {
+    ggplot(df, aes({{x}}, {{y}}, color = {{y}})) +
+    geom_boxplot() +
+    geom_jitter(position = position_jitter(0.15)) +
+    labs(x = "Number of Tests Completed",
+         y = "Symptom Severity") +
+    theme(legend.position = "none")
+}
+
+```
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind, number_tests, total_symptom_score_post_injury_1))
+```
+
+### Total Symptom Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+total_symptom_score_aov <- aov(total_symptom_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(total_symptom_score_aov)
+```
+
+### Total Symptom Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+total_symptom_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    total_symptom_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+total_symptom_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+total_symptom_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Headache-Migraine Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind, 
+                    number_tests,
+                    headache_migraine_cluster_score_post_injury_1))
+```
+
+### Headache-Migraine Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+headache_migraine_cluster_score_aov <- aov(headache_migraine_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(headache_migraine_cluster_score_aov)
+```
+
+### Headache-Migraine Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+headache_migraine_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    headache_migraine_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+headache_migraine_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+headache_migraine_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Cognitive Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind,
+                    number_tests,
+                    cognitive_cluster_score_post_injury_1))
+```
+
+### Cognitive Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+cognitive_cluster_score_aov <- aov(cognitive_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(cognitive_cluster_score_aov)
+```
+
+### Cognitive Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+cognitive_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    cognitive_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cognitive_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cognitive_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Anxiety-Mood Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind,
+                    number_tests,
+                    anxiety_mood_cluster_score_post_injury_1))
+```
+
+
+### Anxiety-Mood Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+anxiety_mood_cluster_score_aov <- aov(anxiety_mood_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(anxiety_mood_cluster_score_aov)
+```
+
+### Anxiety-Mood Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+anxiety_mood_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    anxiety_mood_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+anxiety_mood_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+anxiety_mood_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Ocular-Motor Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind,
+                    number_tests,
+                    ocular_motor_cluster_score_post_injury_1))
+```
+
+
+### Ocular-Motor Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+ocular_motor_cluster_score_aov <- aov(ocular_motor_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(ocular_motor_cluster_score_aov)
+```
+
+### Ocular-Motor Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+ocular_motor_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    ocular_motor_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+ocular_motor_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+ocular_motor_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Vestibular Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind,
+                    number_tests,
+                    vestibular_cluster_score_post_injury_1))
+```
+
+
+### Vestibular Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+vestibular_cluster_score_aov <- aov(vestibular_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+
+```
+
+```{r, include=TRUE}
+summary(vestibular_cluster_score_aov)
+```
+
+### Vestibular Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+vestibular_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    vestibular_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+vestibular_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+vestibular_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Sleep Cluster Score Test 1 Boxplot Comparison 
+
+```{r, include=TRUE}
+ggplotly(test_1_bxp(all_impact_sims_bind,
+                    number_tests,
+                    sleep_cluster_score_post_injury_1))
+```
+
+
+### Sleep Cluster Score Test 1 ANOVA 
+
+```{r, include=FALSE}
+
+sleep_cluster_score_aov <- aov(sleep_cluster_score_post_injury_1 ~ number_tests, data = all_impact_sims_bind)
+
+```
+
+```{r, include=TRUE}
+summary(sleep_cluster_score_aov)
+```
+
+### Sleep Cluster Score Test 1 Pairwise Comparisons 
+
+```{r, include=FALSE}
+sleep_cluster_score_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    sleep_cluster_score_post_injury_1 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+sleep_cluster_score_aov_pwc <- rtp_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+sleep_cluster_score_aov_pwc %>% 
+  reactable()
+```
+
 
