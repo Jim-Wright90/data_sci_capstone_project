@@ -1,0 +1,237 @@
+---
+title: "Educational Data Science Capstone Project"
+runtime: shiny  
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    vertical_layout: scroll
+    theme: united
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(flexdashboard)
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(gt)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+library(rstatix)
+library(ggpubr)
+library(writexl)
+library(remotes)
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(color = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+```
+
+```{r, include=FALSE}
+# all impact data 
+
+impact_all <- read_csv(here("data", "impact_data.csv"))
+
+str(impact_all)
+
+
+#all clean sims data
+sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
+
+str(sims_concussion_data)
+
+#impact data only
+
+one_impact_test <- read_csv(here("data", "one_post_injury_impact_test.csv"))
+
+str(one_impact_test)
+
+two_impact_test <- read_csv(here("data", "two_post_injury_impact_test.csv"))
+
+three_impact_test <- read_csv(here("data", "three_post_injury_impact_test.csv"))
+
+four_impact_test <- read_csv(here("data", "four_post_injury_impact_test.csv"))
+
+# impact sims merge data
+
+one_impact_sims <- read_csv(here("data", "one_post_injury_test_impact_sims_merge.csv"))
+
+str(one_impact_sims)
+
+two_impact_sims <- read_csv(here("data", "two_post_injury_test_impact_sims_merge.csv"))
+
+three_impact_sims <- read_csv(here("data", "three_post_injury_test_impact_sims_merge.csv"))
+
+four_impact_sims <- read_csv(here("data", "four_post_injury_test_impact_sims_merge.csv"))
+
+# pcss items 
+
+pcss_items <- import(here("data", "pcss_items.xlsx"),
+               setclass = "tbl_df") 
+
+pcss_cluster <- import(here("data", "cluster_scores.xlsx"),
+               setclass = "tbl_df") 
+```
+
+```{r, include=FALSE}
+#helpful functions 
+
+mean_2 <- function(x) {
+  z <- na.omit(x)
+  sum(z) / length(z)
+}
+
+my_mean <- function(x) {
+  mean(x[x >= 0], na.rm = TRUE)
+}
+
+create_react_time <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+create_react <- function(df, var) {
+    df %>% 
+      summarize(Mean = mean({{var}}),
+                SD = sd({{var}}),
+                Min = min({{var}}),
+                Max = max({{var}}),
+                Total = length({{var}})) %>% 
+      mutate_if(is.numeric, round, 2) %>% 
+      reactable(columns = list(
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ))
+}
+
+```
+
+# Data Overview 
+
+Sidebar {.sidebar}
+------------
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### ImPACT Test Totals
+
+```{r, include=FALSE}
+t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(9991,
+                                  5295,
+                                  2228,
+                                  780))
+```
+
+```{r, include=FALSE}
+t_sum_pi %>% 
+  reactable(columns = list(
+    Level = colDef(name = "Level",
+                   align = "center"),
+    Total = colDef(name = "Total", 
+                   align = "center",
+                   format = colFormat(separators = TRUE, suffix = " individuals"))),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE)
+```
+
+```{r, include=FALSE}
+pi_plot <- ggplot(t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",",
+                                                 scientific = FALSE)) +
+  coord_flip() +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(pi_plot)
+```
+
+### PCSS Item Description
+
+```{r}
+pcss_items %>% 
+  reactable(columns = list(
+    Item = colDef(name = "Item",
+                   align = "center"),
+    Symptom = colDef(name = "Symptom", 
+                   align = "center"),
+    Cluster = colDef(name = "Cluster",
+                     align = "center")),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE,
+    searchable = TRUE)
+```
+
+### PCSS Symptom Clusters
+
+```{r, include=FALSE}
+head(pcss_cluster)
+
+pcss_cluster_plot <- ggplot(pcss_cluster, aes(fct_reorder(Cluster, `Total Possible Severity Score`),
+                                              `Total Possible Severity Score`)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  scale_y_continuous(limits = c(0, 30),
+                     breaks = c(0, 5, 10, 15, 20, 25, 30)) +
+  coord_flip() +
+  labs(x = "",
+       y = "Total Possible Severity Score",
+       caption = "Total Possible Severity Score = 132")
+```
+
+```{r, include=TRUE}
+ggplotly(pcss_cluster_plot)
+```
+
+Row 
+-----------------------------------------------------------------------
+
+```{r}
+# Define inputs 
+
+
+
+```

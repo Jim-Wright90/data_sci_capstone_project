@@ -83,6 +83,12 @@ pcss_items <- import(here("data", "pcss_items.xlsx"),
 
 pcss_cluster <- import(here("data", "cluster_scores.xlsx"),
                setclass = "tbl_df") 
+
+rtp_steps <- import(here("data", "rtp_steps.xlsx"),
+                    setclass = "tbl_df")
+
+rtl <- import(here("data", "rtl_description.xlsx"),
+              setclass = "tbl_df")
 ```
 
 ```{r, include=FALSE}
@@ -145,7 +151,7 @@ The specific goal of this project is to explore trends from two data sets. The f
 
 The SIMS data set is utilized to explore trends in the duration of time to complete RTL and RTP protocols. The ImPACT and SIMS data sets have been joined corresponding to the number of post-injury tests completed from the ImPACT data set. Although the merger of these data sets did not yield a large number of observations to analyze, the following research question is explored: What is the relationship between symptom severity scores and RTL/RTP duration? 
 
-The top row of the *Data Overview* tab displays information on the number of individuals who completed multiple ImPACT tests as well as information on the PCSS. The second row displays information on the complete SIMS data set, consisting of individuals who experienced a documented concussion and were tracked for recovery during the RTL and RTP process. The bottom row displays summary information for RTL/RTP duration times of the merged ImPACT and SIMS data sets, where the data is structured to communicate RTL/RTP duration times dependent on the number of post-injury tests completed by the individual. 
+The top row of the *Data Overview* tab displays information on the number of individuals who completed multiple ImPACT tests as well as information on the PCSS. The second row displays information on the complete SIMS data set, consisting of individuals who experienced a documented concussion and were tracked for recovery during the RTL and RTP process. 
 
 
 Row {.tabset}
@@ -503,163 +509,6 @@ rtp_smry_plot <- ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_7)) +
 ggplotly(rtp_smry_plot)
 ```
 
-Row {.tabset}
------------------------------------------------------------------------
-
-### Data Breakdown 
-
-```{r, include=FALSE}
-sims_t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
-                                  "Two Post-Injury Tests",
-                                  "Three Post-Injury Tests",
-                                  "Four Post-Injury Tests"),
-                      "Total" = c(254,
-                                  336,
-                                  133,
-                                  32))
-
-```
-
-```{r, include=FALSE}
-sims_pi_plot <- ggplot(sims_t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
-  geom_col(fill = "blue",
-           alpha = 0.7) +
-  coord_flip() +
-  labs(x = "",
-       y = "Individuals")
-```
-
-```{r, include=TRUE}
-ggplotly(sims_pi_plot)
-```
-
-### One Test RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(one_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### One Test RTL Plot 
-
-```{r, include=FALSE}
-rtl_hist <- function(df, x) {
-  ggplot(df, aes({{x}})) +
-  geom_histogram(fill = "#56B4E9",
-                color = "white", 
-                alpha = 0.9,
-                bins = 10) +
-  facet_wrap(~gender, nrow = 1) +
-  labs(x = "Days to Complete RTL",
-       y = "")
-}
-
-rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3)
-
-rtp_hist <- function(df, x) {
-  ggplot(df, aes({{x}})) +
-  geom_histogram(fill = "#56B4E9",
-                color = "white", 
-                alpha = 0.9,
-                bins = 10) +
-  facet_wrap(~gender, nrow = 1) +
-  labs(x = "Days to Complete RTP",
-       y = "")
-}
-
-rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7)
-
-```
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### One Test RTP Summary
-
-```{r, include=TRUE}
-create_react_time(one_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### One Test RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-### Two Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(two_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Two Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(two_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Two Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(two_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Two Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(two_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-
-### Three Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(three_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Three Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(three_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Three Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(three_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Three Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(three_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-### Four Tests RTL Summary 
-
-```{r, include=TRUE}
-create_react_time(four_impact_sims, dys_btwn_onset_rtp_3)
-```
-
-### Four Tests RTL Plot 
-
-```{r, include=TRUE}
-ggplotly(rtl_hist(four_impact_sims, dys_btwn_onset_rtp_3))
-```
-
-### Four Tests RTP Summary
-
-```{r, include=TRUE}
-create_react_time(four_impact_sims, dys_btwn_onset_rtp_7)
-```
-
-### Four Tests RTP Plot 
-
-```{r, include=TRUE}
-ggplotly(rtp_hist(four_impact_sims, dys_btwn_onset_rtp_7))
-```
-
-
 
 # One Post-Injury Test 
 
@@ -667,6 +516,8 @@ Sidebar {.sidebar}
 ------------
 
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 9,991 concussion cases where the individual completed one post-injury test during recovery. 
+
+The bottom row provides summaries and visualizations of PCSS severity scores for the 254 concussion cases representing the merged ImPACT and SIMS data sets where the individual completed one post-injury test during recovery. 
 
 Row {.tabset}
 -----------------------------------------------------------------------
@@ -1022,6 +873,7 @@ Sidebar {.sidebar}
 
 Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2 symptom severity. 
 
+The bottom row provides summaries and visualizations of PCSS severity scores for the 336 concussion cases representing the merged ImPACT and SIMS data sets where the individual completed two post-injury tests during recovery. 
 
 
 Row {.tabset}
@@ -1490,6 +1342,95 @@ two_impact_test_sleep_cluster_score_res
 two_impact_test_sleep_cluster_score_res
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Merged Total Symptom Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(two_impact_sims, total_symptom_score_post_injury_1)
+```
+
+### Merged Total Symptom Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, total_symptom_score_post_injury_2)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(two_impact_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+### Merged Cognitive Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(two_impact_sims, cognitive_cluster_score_post_injury_1)
+```
+
+### Merged Cognitive Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, cognitive_cluster_score_post_injury_2)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(two_impact_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(two_impact_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+### Merged Vestibular Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(two_impact_sims, vestibular_cluster_score_post_injury_1)
+```
+
+### Merged Vestibular Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, vestibular_cluster_score_post_injury_2)
+```
+
+
+### Merged Sleep Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(two_impact_sims, sleep_cluster_score_post_injury_1)
+```
+
+
+### Merged Sleep Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(two_impact_sims, sleep_cluster_score_post_injury_2)
+```
+
 # Three Post-Injury Tests 
 
 Sidebar {.sidebar}
@@ -1498,6 +1439,8 @@ Sidebar {.sidebar}
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 2,228 concussion cases where the individual completed three post-injury tests during recovery. 
 
 Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2 and post-injury 3 symptom severity. Additionally, differences in symptom cluster and total symptom severity scores were significantly different between post-injury 2 and post-injury 3.  
+
+The bottom row provides summaries and visualizations of PCSS severity scores for the 133 concussion cases representing the merged ImPACT and SIMS data sets where the individual completed three post-injury tests during recovery. 
 
 
 
@@ -2278,6 +2221,135 @@ three_impact_sleep_cluster_score_pwc %>%
   reactable()
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Merged Total Symptom Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(three_impact_sims, total_symptom_score_post_injury_1)
+```
+
+### Merged Total Symptom Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, total_symptom_score_post_injury_2)
+```
+
+### Merged Total Symptom Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, total_symptom_score_post_injury_3)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(three_impact_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, headache_migraine_cluster_score_post_injury_3)
+```
+
+### Merged Cognitive Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(three_impact_sims, cognitive_cluster_score_post_injury_1)
+```
+
+### Merged Cognitive Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, cognitive_cluster_score_post_injury_2)
+```
+
+### Merged Cognitive Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, cognitive_cluster_score_post_injury_3)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(three_impact_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, anxiety_mood_cluster_score_post_injury_3)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(three_impact_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, ocular_motor_cluster_score_post_injury_3)
+```
+
+### Merged Vestibular Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(three_impact_sims, vestibular_cluster_score_post_injury_1)
+```
+
+### Merged Vestibular Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, vestibular_cluster_score_post_injury_2)
+```
+
+### Merged Vestibular Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, vestibular_cluster_score_post_injury_3)
+```
+
+### Merged Sleep Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(three_impact_sims, sleep_cluster_score_post_injury_1)
+```
+
+
+### Merged Sleep Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(three_impact_sims, sleep_cluster_score_post_injury_2)
+```
+
+### Merged Sleep Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(three_impact_sims, sleep_cluster_score_post_injury_3)
+```
 
 # Four Post-Injury Tests 
 
@@ -2287,6 +2359,8 @@ Sidebar {.sidebar}
 **_Description:_** This tab provides summaries and visualizations of PCSS severity scores for the 780 concussion cases where the individual completed three post-injury tests during recovery. 
 
 Across all symptom clusters and the total symptom score, post-injury 1 symptom severity was significantly higher than post-injury 2, post-injury 3, and post-injury 4 symptom severity. Additionally, differences in symptom cluster and total symptom severity scores were significantly different between post-injury 2, post-injury 3, and post-injury 4 with the exception of one pairwise comparison (ocular-motor symptom cluster severity between post-injury 3 and post-injury 4).  
+
+The bottom row provides summaries and visualizations of PCSS severity scores for the 32 concussion cases representing the merged ImPACT and SIMS data sets where the individual completed three post-injury tests during recovery. 
 
 
 Row {.tabset}
@@ -3108,6 +3182,523 @@ four_impact_sleep_cluster_score_pwc <- four_impact_sleep_cluster_score_pwc %>%
 ```{r, include=TRUE}
 four_impact_sleep_cluster_score_pwc %>% 
   reactable()
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Merged Total Symptom Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(four_impact_sims, total_symptom_score_post_injury_1)
+```
+
+### Merged Total Symptom Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, total_symptom_score_post_injury_2)
+```
+
+### Merged Total Symptom Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, total_symptom_score_post_injury_3)
+```
+
+### Merged Total Symptom Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, total_symptom_score_post_injury_4)
+```
+
+
+### Merged Headache-Migraine Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(four_impact_sims, headache_migraine_cluster_score_post_injury_1)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, headache_migraine_cluster_score_post_injury_2)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, headache_migraine_cluster_score_post_injury_3)
+```
+
+### Merged Headache-Migraine Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, headache_migraine_cluster_score_post_injury_4)
+```
+
+### Merged Cognitive Cluster Score Summary Test 1 
+
+```{r, include=TRUE}
+create_react(four_impact_sims, cognitive_cluster_score_post_injury_1)
+```
+
+### Merged Cognitive Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, cognitive_cluster_score_post_injury_2)
+```
+
+### Merged Cognitive Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, cognitive_cluster_score_post_injury_3)
+```
+
+### Merged Cognitive Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, cognitive_cluster_score_post_injury_4)
+```
+
+
+### Merged Anxiety-Mood Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(four_impact_sims, anxiety_mood_cluster_score_post_injury_1)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, anxiety_mood_cluster_score_post_injury_2)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, anxiety_mood_cluster_score_post_injury_3)
+```
+
+### Merged Anxiety-Mood Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, anxiety_mood_cluster_score_post_injury_4)
+```
+
+
+### Merged Ocular-Motor Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(four_impact_sims, ocular_motor_cluster_score_post_injury_1)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, ocular_motor_cluster_score_post_injury_2)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, ocular_motor_cluster_score_post_injury_3)
+```
+
+### Merged Ocular-Motor Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, ocular_motor_cluster_score_post_injury_4)
+```
+
+### Merged Vestibular Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(four_impact_sims, vestibular_cluster_score_post_injury_1)
+```
+
+### Merged Vestibular Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, vestibular_cluster_score_post_injury_2)
+```
+
+### Merged Vestibular Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, vestibular_cluster_score_post_injury_3)
+```
+
+### Merged Vestibular Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, vestibular_cluster_score_post_injury_4)
+```
+
+### Merged Sleep Cluster Score Summary Test 1
+
+```{r, include=TRUE}
+create_react(four_impact_sims, sleep_cluster_score_post_injury_1)
+```
+
+
+### Merged Sleep Cluster Score Summary Test 2
+
+```{r, include=TRUE}
+create_react(four_impact_sims, sleep_cluster_score_post_injury_2)
+```
+
+### Merged Sleep Cluster Score Summary Test 3
+
+```{r, include=TRUE}
+create_react(four_impact_sims, sleep_cluster_score_post_injury_3)
+```
+
+### Merged Sleep Cluster Score Summary Test 4
+
+```{r, include=TRUE}
+create_react(four_impact_sims, sleep_cluster_score_post_injury_4)
+```
+
+# RTL/RTP 
+
+Sidebar {.sidebar}
+------------
+
+**_Description:_** This tab provides summaries and visualizations for RTL and RTP duration time structured by the number of post-injury tests completed by the individual. The top row displays how many individuals completed either one, two, three, or four post-injury tests during their recovery and also describes the RTP protocol and requirements to comlpete the RTL step. 
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Data Breakdown 
+
+```{r, include=FALSE}
+sims_t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(254,
+                                  336,
+                                  133,
+                                  32))
+
+```
+
+```{r, include=FALSE}
+sims_pi_plot <- ggplot(sims_t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  coord_flip() +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(sims_pi_plot)
+```
+
+
+### RTP Steps 
+
+```{r, include=FALSE}
+head(rtp_steps)
+
+rtp_tbl <- rtp_steps %>% 
+  reactable(columns = list(
+    Step = colDef(name = "Step",
+                  align = "center"),
+    Description = colDef(name = "Description",
+                         align = "center"),
+    Definition = colDef(name = "Definition",
+                        align = "center")
+  ),
+  striped = TRUE,
+  outlined = TRUE,
+  compact = TRUE,
+  highlight = TRUE,
+  bordered = TRUE)
+
+```
+
+```{r, include=TRUE}
+rtp_tbl
+```
+
+### RTL Description 
+
+```{r, include=FALSE}
+head(rtl)
+
+rtl_tbl <- rtl %>% 
+  reactable(columns = list(
+    Feature = colDef(name = "Feature",
+                  align = "center"),
+    Description = colDef(name = "Description",
+                         align = "center")
+  ),
+  striped = TRUE,
+  outlined = TRUE,
+  compact = TRUE,
+  highlight = TRUE,
+  bordered = TRUE)
+
+```
+
+```{r, include=TRUE}
+rtl_tbl
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### One Test Onset to Test Summary
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_test_1)
+```
+
+### One Test Onset to Test Plot
+
+```{r, include=FALSE}
+onset_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days From Injury Onset to Test",
+       y = "")  
+}
+```
+
+```{r, include=TRUE}
+ggplotly(onset_hist(one_impact_sims, dys_btwn_onset_test_1))
+```
+
+### One Test RTL Summary
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### One Test RTL Plot 
+
+```{r, include=FALSE}
+rtl_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTL",
+       y = "")
+}
+
+rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3)
+
+rtp_hist <- function(df, x) {
+  ggplot(df, aes({{x}})) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white", 
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~gender, nrow = 1) +
+  labs(x = "Days to Complete RTP",
+       y = "")
+}
+
+rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7)
+
+```
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(one_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### One Test RTP Summary
+
+```{r, include=TRUE}
+create_react_time(one_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### One Test RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(one_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Two Tests Onset to Test 2 Summary
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_test_2)
+```
+
+### Two Tests Onset to Test 2 Plot
+
+```{r, include=TRUE}
+ggplotly(onset_hist(two_impact_sims, dys_btwn_onset_test_2))
+```
+
+### Two Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Two Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(two_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Two Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(two_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Two Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(two_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Three Tests Onset to Test 3 Summary
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_test_3)
+```
+
+### Three Tests Onset to Test 3 Plot
+
+```{r, include=TRUE}
+ggplotly(onset_hist(three_impact_sims, dys_btwn_onset_test_3))
+```
+
+
+### Three Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Three Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(three_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Three Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(three_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Three Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(three_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Four Tests Onset to Test 4 Summary
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_test_4)
+```
+
+### Four Tests Onset to Test 4 Plot
+
+```{r, include=TRUE}
+ggplotly(onset_hist(four_impact_sims, dys_btwn_onset_test_4))
+```
+
+
+### Four Tests RTL Summary 
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_3)
+```
+
+### Four Tests RTL Plot 
+
+```{r, include=TRUE}
+ggplotly(rtl_hist(four_impact_sims, dys_btwn_onset_rtp_3))
+```
+
+### Four Tests RTP Summary
+
+```{r, include=TRUE}
+create_react_time(four_impact_sims, dys_btwn_onset_rtp_7)
+```
+
+### Four Tests RTP Plot 
+
+```{r, include=TRUE}
+ggplotly(rtp_hist(four_impact_sims, dys_btwn_onset_rtp_7))
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+```{r, include=FALSE}
+#binding rows to use for anovas 
+
+one_impact_sims_bind <- one_impact_sims %>% 
+  select(3, 6, 24, 25, 52, 53, 54, 55, 56, 57, 58)
+
+two_impact_sims_bind <- two_impact_sims %>% 
+  select(3, 7, 25, 26, 79, 81, 83, 85, 87, 89, 91)
+
+three_impact_sims_bind <- three_impact_sims %>% 
+  select(3, 8, 26, 27, 105, 108, 111, 114, 117, 120, 123)
+
+four_impact_sims_bind <- four_impact_sims %>% 
+  select(3, 9, 27, 28, 131, 135, 139, 143, 147, 151, 155)
+
+
+all_impact_sims_bind <- bind_rows(one_impact_sims_bind,
+                              two_impact_sims_bind,
+                              three_impact_sims_bind,
+                              four_impact_sims_bind,
+                              .id = "number_tests")
+
+all_impact_sims_bind <- all_impact_sims_bind %>% 
+  mutate(number_tests = as.factor(number_tests))
+
+str(all_impact_sims_bind)
+
+tst_aov <- aov(dys_btwn_onset_rtp_7 ~ number_tests, data = all_impact_sims_bind)
+summary(tst_aov)
+
+pairwise.t.test(all_impact_sims_bind$dys_btwn_onset_rtp_7,
+                all_impact_sims_bind$number_tests,
+                p.adj = "bonferroni", paired = FALSE)
+
+tst_aov_pwc <- all_impact_sims_bind %>% 
+  pairwise_t_test(
+    dys_btwn_onset_rtp_7 ~ number_tests, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+tst_aov_pwc <- tst_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+
+tst_aov_pwc %>% 
+  reactable()
+
+# anova code above can be used for all outcome variables to compare between test groups
 ```
 
 
