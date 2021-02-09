@@ -229,9 +229,25 @@ ggplotly(pcss_cluster_plot)
 Row 
 -----------------------------------------------------------------------
 
+SIMS data set demographic information. 
+
 ```{r}
 # Define inputs 
 
+selectInput("var1", "Sims Demographic Variables:",
+            "Gender" = "gender",
+            "Age" = "age",
+            "League" = "league",
+            "Sport Level" = "level")
+
+renderPlot({
+  ggplotly(geom_col(fill = "blue",
+           alpha = 0.7) +
+    facet_wrap(input$var1) +
+    coord_flip() +
+    labs(x = "",
+         y = "Total"))
+})
 
 
 ```

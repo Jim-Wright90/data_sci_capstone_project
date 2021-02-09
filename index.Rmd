@@ -30,6 +30,7 @@ library(rstatix)
 library(ggpubr)
 library(writexl)
 library(remotes)
+library(profvis)
 
 theme_set(theme_minimal(15) +
             theme(legend.position = "bottom",
