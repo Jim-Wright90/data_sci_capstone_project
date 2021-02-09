@@ -1,0 +1,55 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(here)
+```
+
+```{r global, include=FALSE}
+sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv")) %>% 
+  mutate(age = as.factor(age))
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+
+SIMS data set demographic information. 
+
+```{r, include=TRUE}
+selectInput("var1", "Sims Demographic Variables:",
+            choices = c("Gender" = "gender",
+            "Age" = "age",
+            "League" = "league",
+            "Sport Level" = "level"))
+
+```
+
+Column 
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+renderPlot({
+  sims_concussion_data %>%
+  group_by(input$var1) %>%
+  summarize(total = n()) %>%
+  arrange(desc(total)) %>%
+  ggplot(aes(fct_reorder(input$var1, total), total)) +
+    geom_col(fill = "blue",
+           alpha = 0.7) +
+    coord_flip() +
+    labs(x = "",
+         y = "Total")
+})
+```
+
