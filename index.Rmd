@@ -40,7 +40,7 @@ theme_set(theme_minimal(15) +
           )
 ```
 
-```{r, include=FALSE}
+```{r global, include=FALSE}
 # all impact data 
 
 impact_all <- read_csv(here("data", "impact_data.csv"))
