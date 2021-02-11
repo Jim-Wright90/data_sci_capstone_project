@@ -145,60 +145,113 @@ create_react <- function(df, var) {
 Sidebar {.sidebar}
 ------------
 
-SIMS data set demographic information. 
+**SIMS Data Variable Exploration**
 
 ```{r, include=TRUE}
 selectInput("var1", "Sims Demographic Variables:",
             choices = c("Gender" = "gender",
-            "Age" = "age",
-            "League" = "league",
-            "Sport Level" = "level"))
+                        "Age" = "age",
+                        "League" = "league",
+                        "Sport Level" = "level"))
+
+selectInput("var2", "Sims Demographic Variables:",
+            choices = c("School" = "school",
+                        "Sport" = "sport"))
 
 ```
 
 
-Row 
+**SIMS RTL/RTP information**
+
+```{r, inlcude=FALSE}
+
+selectInput("var3", "Sims Demographic Variables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age",
+                        "League" = "league",
+                        "Sport Level" = "level"))
+
+```
+
+Row {.tabset}
 -----------------------------------------------------------------------
 
+### Concussion Totals 1
 
 ```{r}
 # Define inputs 
 
-
 renderPlotly({
   sims_concussion_data %>%
-  group_by(input$var1) %>%
-  summarize(total = n()) %>%
-  arrange(desc(total)) %>%
-  ggplot(aes(fct_reorder(input$var1, total), total)) +
-    geom_col(fill = "blue",
-           alpha = 0.7) +
+    ggplot(aes_string(input$var1)) +
+    geom_bar(fill = "blue",
+             alpha = 0.7) +
     coord_flip() +
     labs(x = "",
-         y = "Total")
+         y = "Total Concussions")
 })
 
-# renderPlot({
-#   sims_concussion_data %>% 
-#   ggplot(aes(input$var1)) +
-#   geom_bar()
-# })
+```
+
+### Concussion Totals 2
+
+```{r, include=FALSE}
+# tbl_1 <- sims_concussion_data %>%
+#   group_by(input$var2) %>%
+#   summarize(total = n()) %>%
+#   arrange(desc(total)) %>%
+#   reactable(
+#     columns = list(
+#       input$var2 = colDef(align = "center"),
+#       total = colDef(name = "Total",
+#                      align = "center",
+#                      format = colFormat(suffix = " concussions"))),
+#     pagination = TRUE,
+#     striped = TRUE,
+#     outlined = TRUE,
+#     compact = TRUE,
+#     highlight = TRUE,
+#     bordered = TRUE
+#     )
+```
+
+```{r, include=TRUE}
+
+# renderReactable(tbl_1)
+```
 
 
-# sims_gender <- sims_concussion_data %>% 
-#   group_by(gender) %>% 
-#   summarize(total = n()) %>% 
-#   arrange(desc(total))
-# 
-# sims_gender_plot <- ggplot(sims_gender, aes(fct_reorder(gender, total), total)) +
-#   geom_col(fill = "blue",
-#            alpha = 0.7) +
-#   scale_y_continuous(limits = c(0, 600),
-#                      breaks = c(0, 200, 400, 600)) +
-#   coord_flip() +
-#   labs(x = "",
-#        y = "Total")
+Row {.tabset}
+-----------------------------------------------------------------------
 
-#?selectInput
+### RTL
 
+```{r, include=FALSE}
+
+renderPlotly({
+  ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_3)) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~input$var3, nrow = 1) +
+  labs(x = "Days to Complete RTL",
+       y = "")
+})
+```
+
+### RTP
+
+```{r, include=FALSE}
+
+renderPlotly({
+  ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_7)) +
+  geom_histogram(fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9,
+                bins = 10) +
+  facet_wrap(~input$var3, nrow = 1) +
+  labs(x = "Days to Complete RTP",
+       y = "")
+})
 ```
