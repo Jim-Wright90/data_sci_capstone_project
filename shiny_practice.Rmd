@@ -92,53 +92,6 @@ pcss_cluster <- import(here("data", "cluster_scores.xlsx"),
                setclass = "tbl_df") 
 ```
 
-```{r, include=FALSE}
-#helpful functions 
-
-mean_2 <- function(x) {
-  z <- na.omit(x)
-  sum(z) / length(z)
-}
-
-my_mean <- function(x) {
-  mean(x[x >= 0], na.rm = TRUE)
-}
-
-create_react_time <- function(df, var) {
-    df %>% 
-      summarize(Mean = mean({{var}}),
-                SD = sd({{var}}),
-                Min = min({{var}}),
-                Max = max({{var}}),
-                Total = length({{var}})) %>% 
-      mutate_if(is.numeric, round, 2) %>% 
-      reactable(columns = list(
-        Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
-        SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
-        Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
-        Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
-        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
-      ))
-}
-
-create_react <- function(df, var) {
-    df %>% 
-      summarize(Mean = mean({{var}}),
-                SD = sd({{var}}),
-                Min = min({{var}}),
-                Max = max({{var}}),
-                Total = length({{var}})) %>% 
-      mutate_if(is.numeric, round, 2) %>% 
-      reactable(columns = list(
-        Mean = colDef(format = colFormat(separators = TRUE)),
-        SD = colDef(format = colFormat(separators = TRUE)),
-        Min = colDef(format = colFormat(separators = TRUE)),
-        Max = colDef(format = colFormat(separators = TRUE)),
-        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
-      ))
-}
-
-```
 
 # Data Overview 
 
@@ -163,7 +116,7 @@ selectInput("var2", "Sims Demographic Variables:",
 
 **SIMS RTL/RTP information**
 
-```{r, inlcude=FALSE}
+```{r, inlcude=TRUE}
 
 selectInput("var3", "Sims Demographic Variables:",
             choices = c("Gender" = "gender",
@@ -197,12 +150,12 @@ renderPlotly({
 
 ```{r, include=FALSE}
 # tbl_1 <- sims_concussion_data %>%
-#   group_by(input$var2) %>%
+#   group_by({{input$var2}}) %>%
 #   summarize(total = n()) %>%
 #   arrange(desc(total)) %>%
 #   reactable(
 #     columns = list(
-#       input$var2 = colDef(align = "center"),
+#       {{input$var2}} = colDef(align = "center"),
 #       total = colDef(name = "Total",
 #                      align = "center",
 #                      format = colFormat(suffix = " concussions"))),
@@ -216,8 +169,7 @@ renderPlotly({
 ```
 
 ```{r, include=TRUE}
-
-# renderReactable(tbl_1)
+ renderReactable(tbl_1)
 ```
 
 
@@ -230,10 +182,10 @@ Row {.tabset}
 
 renderPlotly({
   ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_3)) +
-  geom_histogram(fill = "#56B4E9",
+  geom_histogram(bins = input$var3,
+                fill = "#56B4E9",
                 color = "white",
-                alpha = 0.9,
-                bins = 10) +
+                alpha = 0.9) +
   facet_wrap(~input$var3, nrow = 1) +
   labs(x = "Days to Complete RTL",
        y = "")
@@ -246,10 +198,10 @@ renderPlotly({
 
 renderPlotly({
   ggplot(sims_concussion_data, aes(dys_btwn_onset_rtp_7)) +
-  geom_histogram(fill = "#56B4E9",
+  geom_histogram(bins = input$var3,
+                 fill = "#56B4E9",
                 color = "white",
-                alpha = 0.9,
-                bins = 10) +
+                alpha = 0.9) +
   facet_wrap(~input$var3, nrow = 1) +
   labs(x = "Days to Complete RTP",
        y = "")
