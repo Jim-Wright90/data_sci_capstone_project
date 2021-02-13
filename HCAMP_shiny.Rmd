@@ -114,7 +114,7 @@ selectInput("var2", "Total Concussion Tables:",
 ```
 
 
-**SIMS RTL/RTP information**
+**SIMS RTL/RTP Information**
 
 ```{r, inlcude=TRUE}
 
@@ -286,3 +286,814 @@ rtp_tbl <- reactive({
  renderReactable(rtp_tbl())
 ```
 
+
+# PCSS Ratings  
+
+Sidebar {.sidebar}
+------------
+
+**One Post-Injury Test**
+
+```{r, include=TRUE}
+
+selectInput("var5", "Demographic Variables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age"))
+
+selectInput("var4", "Symptom Cluster:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_1",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_1",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
+
+```
+
+**Two Post-Injury Tests**
+
+```{r, include=TRUE}
+
+selectInput("var8", "Demographic Variables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age_post_injury_1"))
+
+selectInput("var6", "Test 1:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_1",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_1",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
+
+selectInput("var7", "Test 2:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_2",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_2",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_2",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_2"))
+
+```
+
+
+**Three Post-Injury Tests**
+
+```{r, include=TRUE}
+
+selectInput("var12", "Demographic Variables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age_post_injury_1"))
+
+selectInput("var9", "Test 1:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_1",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_1",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
+
+selectInput("var10", "Test 2:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_2",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_2",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_2",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_2"))
+
+selectInput("var11", "Test 3:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_3",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_3",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_3",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_3",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_3",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_3",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_3"))
+```
+
+**Four Post-Injury Tests**
+
+```{r, include=TRUE}
+
+selectInput("var17", "Demographic Variables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age_post_injury_1"))
+
+selectInput("var13", "Test 1:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_1",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_1",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
+
+selectInput("var14", "Test 2:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_2",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_2",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_2",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_2"))
+
+selectInput("var15", "Test 3:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_3",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_3",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_3",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_3",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_3",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_3",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_3"))
+
+selectInput("var16", "Test 4:",
+            choices = c("Total Sympom Score" = "total_symptom_score_post_injury_4",
+                        "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_4",
+                        "Cognitive Cluster" = "cognitive_cluster_score_post_injury_4",
+                        "Anxiety-Mood Cluster" = "anxiety_mood_cluster_score_post_injury_4",
+                        "Ocular-Motor Cluster" = "ocular_motor_cluster_score_post_injury_4",
+                        "Vestibular Cluster" = "vestibular_cluster_score_post_injury_4",
+                        "Sleep Cluster" = "sleep_cluster_score_post_injury_4"))
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### One Post-Injury Test Plots 
+
+```{r, include=TRUE}
+renderPlotly({
+  one_impact_test %>% 
+    ggplot(aes_string(input$var4)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var5) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### One Post-Injury Test Tables 
+
+```{r, include=FALSE}
+# one_pi_tbl <- reactive({
+#   one_impact_test %>%
+#   group_by_at({{input$var5}}) %>%
+#   summarize_at(Mean = mean({{input$var4}}),
+#             SD = sd({{input$var4}}),
+#             Min = min({{input$var4}}),
+#             Max = max({{input$var4}}),
+#             Total = length({{input$var4}})) %>% 
+#     mutate(Mean = as.numeric(Mean),
+#          SD = as.numeric(SD),
+#          Min = as.numeric(Min),
+#          Max = as.numeric(Max),
+#          Total = as.numeric(Total)) %>% 
+#     arrange(desc(Total)) %>% 
+#     mutate_if(is.numeric, round, 2) %>% 
+#     reactable(
+#       defaultColDef = colDef(align = "center"),
+#       columns = list(
+#       Mean = colDef(format = colFormat(separators = TRUE)),
+#       SD = colDef(format = colFormat(separators = TRUE)),
+#       Min = colDef(format = colFormat(separators = TRUE)),
+#       Max = colDef(format = colFormat(separators = TRUE)),
+#       Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+#       ),
+#     pagination = TRUE,
+#     striped = TRUE,
+#     outlined = TRUE,
+#     compact = TRUE,
+#     highlight = TRUE,
+#     bordered = TRUE
+#     )
+#   })
+```
+
+```{r, include=TRUE}
+#renderReactable(one_pi_tbl())
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Two Post-Injury Tests - Test 1 
+
+```{r, include=TRUE}
+renderPlotly({
+  two_impact_test %>% 
+    ggplot(aes_string(input$var6)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var8) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Two Post-Injury Tests - Test 2
+
+```{r, include=TRUE}
+renderPlotly({
+  two_impact_test %>% 
+    ggplot(aes_string(input$var7)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var8) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Three Post-Injury Tests - Test 1 
+
+```{r, include=TRUE}
+renderPlotly({
+  three_impact_test %>% 
+    ggplot(aes_string(input$var9)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var12) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Three Post-Injury Tests - Test 2
+
+```{r, include=TRUE}
+renderPlotly({
+  three_impact_test %>% 
+    ggplot(aes_string(input$var10)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var12) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Three Post-Injury Tests - Test 3
+
+```{r, include=TRUE}
+renderPlotly({
+  three_impact_test %>% 
+    ggplot(aes_string(input$var11)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var12) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Four Post-Injury Tests - Test 1 
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_test %>% 
+    ggplot(aes_string(input$var13)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var17) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Four Post-Injury Tests - Test 2
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_test %>% 
+    ggplot(aes_string(input$var14)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var17) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Four Post-Injury Tests - Test 3
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_test %>% 
+    ggplot(aes_string(input$var15)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var17) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+### Four Post-Injury Tests - Test 4
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_test %>% 
+    ggplot(aes_string(input$var16)) +
+    geom_histogram(bins = input$bins1,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var17) +
+    labs(x = "Symptom Severity",
+         y = "")
+})
+```
+
+# RTL/RTP by Number of Tests Completed 
+
+Sidebar {.sidebar}
+------------
+
+
+**Demographic Variables**
+
+```{r, include=TRUE}
+
+selectInput("var18", "RTL/RTP Plots:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age",
+                        "League" = "league",
+                        "Sport Level" = "level"))
+
+selectInput("bins2", "Number of Bins",
+            choices = c(10, 25, 40, 55), selected = 25)
+
+selectInput("var19", "RTL/RTP Tables:",
+            choices = c("Gender" = "gender",
+                        "Age" = "age",
+                        "League" = "league",
+                        "School" = "school",
+                        "Sport" = "sport",
+                        "Sport Level" = "level"))
+
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### RTL One Test Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  one_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_3)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTL",
+         y = "")
+})
+```
+
+### RTL One Test Table
+
+```{r, include=FALSE}
+one_impact_rtl_tbl <- reactive({
+  one_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_3),
+            SD = sd(dys_btwn_onset_rtp_3),
+            Min = min(dys_btwn_onset_rtp_3),
+            Max = max(dys_btwn_onset_rtp_3),
+            Total = length(dys_btwn_onset_rtp_3)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(one_impact_rtl_tbl())
+```
+
+### RTP One Test Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  one_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_7)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTP",
+         y = "")
+})
+```
+
+### RTP One Test Table
+
+```{r, include=FALSE}
+one_impact_rtp_tbl <- reactive({
+  one_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_7),
+            SD = sd(dys_btwn_onset_rtp_7),
+            Min = min(dys_btwn_onset_rtp_7),
+            Max = max(dys_btwn_onset_rtp_7),
+            Total = length(dys_btwn_onset_rtp_7)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(one_impact_rtp_tbl())
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### RTL Two Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  two_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_3)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTL",
+         y = "")
+})
+```
+
+### RTL Two Tests Table
+
+```{r, include=FALSE}
+two_impact_rtl_tbl <- reactive({
+  two_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_3),
+            SD = sd(dys_btwn_onset_rtp_3),
+            Min = min(dys_btwn_onset_rtp_3),
+            Max = max(dys_btwn_onset_rtp_3),
+            Total = length(dys_btwn_onset_rtp_3)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(two_impact_rtl_tbl())
+```
+
+### RTP Two Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  two_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_7)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTP",
+         y = "")
+})
+```
+
+### RTP Two Tests Table
+
+```{r, include=FALSE}
+two_impact_rtp_tbl <- reactive({
+  two_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_7),
+            SD = sd(dys_btwn_onset_rtp_7),
+            Min = min(dys_btwn_onset_rtp_7),
+            Max = max(dys_btwn_onset_rtp_7),
+            Total = length(dys_btwn_onset_rtp_7)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(two_impact_rtp_tbl())
+```
+
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### RTL Three Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  three_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_3)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTL",
+         y = "")
+})
+```
+
+### RTL Three Tests Table
+
+```{r, include=FALSE}
+three_impact_rtl_tbl <- reactive({
+  three_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_3),
+            SD = sd(dys_btwn_onset_rtp_3),
+            Min = min(dys_btwn_onset_rtp_3),
+            Max = max(dys_btwn_onset_rtp_3),
+            Total = length(dys_btwn_onset_rtp_3)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(three_impact_rtl_tbl())
+```
+
+### RTP Three Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  three_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_7)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTP",
+         y = "")
+})
+```
+
+### RTP Three Tests Table
+
+```{r, include=FALSE}
+three_impact_rtp_tbl <- reactive({
+  three_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_7),
+            SD = sd(dys_btwn_onset_rtp_7),
+            Min = min(dys_btwn_onset_rtp_7),
+            Max = max(dys_btwn_onset_rtp_7),
+            Total = length(dys_btwn_onset_rtp_7)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(three_impact_rtp_tbl())
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### RTL Four Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_3)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTL",
+         y = "")
+})
+```
+
+### RTL Four Tests Table
+
+```{r, include=FALSE}
+four_impact_rtl_tbl <- reactive({
+  four_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_3),
+            SD = sd(dys_btwn_onset_rtp_3),
+            Min = min(dys_btwn_onset_rtp_3),
+            Max = max(dys_btwn_onset_rtp_3),
+            Total = length(dys_btwn_onset_rtp_3)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(four_impact_rtl_tbl())
+```
+
+### RTP Four Tests Plot
+
+```{r, include=TRUE}
+renderPlotly({
+  four_impact_sims %>% 
+    ggplot(aes(dys_btwn_onset_rtp_7)) +
+    geom_histogram(bins = input$bins2,
+                   fill = "#56B4E9",
+                color = "white",
+                alpha = 0.9) +
+    facet_wrap(input$var18) +
+    labs(x = "Days to Complete RTP",
+         y = "")
+})
+```
+
+### RTP Four Tests Table
+
+```{r, include=FALSE}
+four_impact_rtp_tbl <- reactive({
+  four_impact_sims %>%
+  group_by_at({{input$var19}}) %>%
+  summarize(Mean = mean(dys_btwn_onset_rtp_7),
+            SD = sd(dys_btwn_onset_rtp_7),
+            Min = min(dys_btwn_onset_rtp_7),
+            Max = max(dys_btwn_onset_rtp_7),
+            Total = length(dys_btwn_onset_rtp_7)) %>% 
+    arrange(desc(Total)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      SD = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Min = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Max = colDef(format = colFormat(separators = TRUE, suffix = " days")),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+```
+
+```{r, include=TRUE}
+ renderReactable(four_impact_rtp_tbl())
+```
