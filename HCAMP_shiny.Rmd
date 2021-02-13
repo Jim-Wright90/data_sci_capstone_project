@@ -32,6 +32,7 @@ library(rstatix)
 library(ggpubr)
 library(writexl)
 library(remotes)
+library(profvis)
 
 theme_set(theme_minimal(15) +
             theme(legend.position = "bottom",
@@ -148,6 +149,7 @@ renderPlotly({
     labs(x = "",
          y = "Total Concussions")
 })
+
 
 ```
 
@@ -447,18 +449,18 @@ renderPlotly({
 # one_pi_tbl <- reactive({
 #   one_impact_test %>%
 #   group_by_at({{input$var5}}) %>%
-#   summarize_at(Mean = mean({{input$var4}}),
-#             SD = sd({{input$var4}}),
-#             Min = min({{input$var4}}),
-#             Max = max({{input$var4}}),
-#             Total = length({{input$var4}})) %>% 
+#   summarize_at(Mean = mean(input$var4),
+#             SD = sd(input$var4),
+#             Min = min(input$var4),
+#             Max = max(input$var4),
+#             Total = length(input$var4)) %>%
 #     mutate(Mean = as.numeric(Mean),
 #          SD = as.numeric(SD),
 #          Min = as.numeric(Min),
 #          Max = as.numeric(Max),
-#          Total = as.numeric(Total)) %>% 
-#     arrange(desc(Total)) %>% 
-#     mutate_if(is.numeric, round, 2) %>% 
+#          Total = as.numeric(Total)) %>%
+#     arrange(desc(Total)) %>%
+#     mutate_if(is.numeric, round, 2) %>%
 #     reactable(
 #       defaultColDef = colDef(align = "center"),
 #       columns = list(
@@ -466,7 +468,7 @@ renderPlotly({
 #       SD = colDef(format = colFormat(separators = TRUE)),
 #       Min = colDef(format = colFormat(separators = TRUE)),
 #       Max = colDef(format = colFormat(separators = TRUE)),
-#       Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))  
+#       Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
 #       ),
 #     pagination = TRUE,
 #     striped = TRUE,
@@ -476,10 +478,11 @@ renderPlotly({
 #     bordered = TRUE
 #     )
 #   })
+
 ```
 
 ```{r, include=TRUE}
-#renderReactable(one_pi_tbl())
+# renderReactable(one_pi_tbl())
 ```
 
 
