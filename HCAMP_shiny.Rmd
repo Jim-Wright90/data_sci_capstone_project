@@ -427,7 +427,7 @@ selectInput("var16", "Test 4:",
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### One Post-Injury Test Plots 
+### One Test Plots 
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -443,53 +443,54 @@ renderPlotly({
 })
 ```
 
-### One Post-Injury Test Tables 
+### One Test Tables 
 
 ```{r, include=FALSE}
-# one_pi_tbl <- reactive({
-#   one_impact_test %>%
-#   group_by_at({{input$var5}}) %>%
-#   summarize_at(Mean = mean(input$var4),
-#             SD = sd(input$var4),
-#             Min = min(input$var4),
-#             Max = max(input$var4),
-#             Total = length(input$var4)) %>%
-#     mutate(Mean = as.numeric(Mean),
-#          SD = as.numeric(SD),
-#          Min = as.numeric(Min),
-#          Max = as.numeric(Max),
-#          Total = as.numeric(Total)) %>%
-#     arrange(desc(Total)) %>%
-#     mutate_if(is.numeric, round, 2) %>%
-#     reactable(
-#       defaultColDef = colDef(align = "center"),
-#       columns = list(
-#       Mean = colDef(format = colFormat(separators = TRUE)),
-#       SD = colDef(format = colFormat(separators = TRUE)),
-#       Min = colDef(format = colFormat(separators = TRUE)),
-#       Max = colDef(format = colFormat(separators = TRUE)),
-#       Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
-#       ),
-#     pagination = TRUE,
-#     striped = TRUE,
-#     outlined = TRUE,
-#     compact = TRUE,
-#     highlight = TRUE,
-#     bordered = TRUE
-#     )
-#   })
+one_pi_tbl <- reactive({
+  one_impact_test %>%
+  group_by_at({{input$var5}}) %>%
+  summarize(Mean = mean(!!sym(input$var4)),
+            SD = sd(!!sym(input$var4)),
+            Min = min(!!sym(input$var4)),
+            Max = max(!!sym(input$var4)),
+            Total = length(!!sym(input$var4))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
 
 ```
 
 ```{r, include=TRUE}
-# renderReactable(one_pi_tbl())
+renderReactable(one_pi_tbl())
 ```
+
 
 
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Two Post-Injury Tests - Test 1 
+### Two Tests Plots - Test 1 
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -505,7 +506,50 @@ renderPlotly({
 })
 ```
 
-### Two Post-Injury Tests - Test 2
+### Two Tests Tables - Test 1 
+
+```{r, include=FALSE}
+two_pi_tbl_1 <- reactive({
+  two_impact_test %>%
+  group_by_at({{input$var8}}) %>%
+  summarize(Mean = mean(!!sym(input$var6)),
+            SD = sd(!!sym(input$var6)),
+            Min = min(!!sym(input$var6)),
+            Max = max(!!sym(input$var6)),
+            Total = length(!!sym(input$var6))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(two_pi_tbl_1())
+```
+
+
+### Two Tests Plots - Test 2
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -521,10 +565,52 @@ renderPlotly({
 })
 ```
 
+### Two Tests Tables - Test 2
+
+```{r, include=FALSE}
+two_pi_tbl_2 <- reactive({
+  two_impact_test %>%
+  group_by_at({{input$var8}}) %>%
+  summarize(Mean = mean(!!sym(input$var7)),
+            SD = sd(!!sym(input$var7)),
+            Min = min(!!sym(input$var7)),
+            Max = max(!!sym(input$var7)),
+            Total = length(!!sym(input$var7))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(two_pi_tbl_2())
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Three Post-Injury Tests - Test 1 
+### Three Tests Plots - Test 1 
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -540,7 +626,49 @@ renderPlotly({
 })
 ```
 
-### Three Post-Injury Tests - Test 2
+### Three Tests Tables - Test 1
+
+```{r, include=FALSE}
+three_pi_tbl_1 <- reactive({
+  three_impact_test %>%
+  group_by_at({{input$var12}}) %>%
+  summarize(Mean = mean(!!sym(input$var9)),
+            SD = sd(!!sym(input$var9)),
+            Min = min(!!sym(input$var9)),
+            Max = max(!!sym(input$var9)),
+            Total = length(!!sym(input$var9))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(three_pi_tbl_1())
+```
+
+### Three Tests Plots - Test 2
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -556,7 +684,49 @@ renderPlotly({
 })
 ```
 
-### Three Post-Injury Tests - Test 3
+### Three Tests Tables - Test 2
+
+```{r, include=FALSE}
+three_pi_tbl_2 <- reactive({
+  three_impact_test %>%
+  group_by_at({{input$var12}}) %>%
+  summarize(Mean = mean(!!sym(input$var10)),
+            SD = sd(!!sym(input$var10)),
+            Min = min(!!sym(input$var10)),
+            Max = max(!!sym(input$var10)),
+            Total = length(!!sym(input$var10))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(three_pi_tbl_2())
+```
+
+### Three Tests Plots - Test 3
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -572,10 +742,52 @@ renderPlotly({
 })
 ```
 
+### Three Tests Tables - Test 3
+
+```{r, include=FALSE}
+three_pi_tbl_3 <- reactive({
+  three_impact_test %>%
+  group_by_at({{input$var12}}) %>%
+  summarize(Mean = mean(!!sym(input$var11)),
+            SD = sd(!!sym(input$var11)),
+            Min = min(!!sym(input$var11)),
+            Max = max(!!sym(input$var11)),
+            Total = length(!!sym(input$var11))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(three_pi_tbl_3())
+```
+
 Row {.tabset}
 -----------------------------------------------------------------------
 
-### Four Post-Injury Tests - Test 1 
+### Four Tests Plots - Test 1 
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -591,7 +803,49 @@ renderPlotly({
 })
 ```
 
-### Four Post-Injury Tests - Test 2
+### Four Tests Tables - Test 1
+
+```{r, include=FALSE}
+four_pi_tbl_1 <- reactive({
+  four_impact_test %>%
+  group_by_at({{input$var17}}) %>%
+  summarize(Mean = mean(!!sym(input$var13)),
+            SD = sd(!!sym(input$var13)),
+            Min = min(!!sym(input$var13)),
+            Max = max(!!sym(input$var13)),
+            Total = length(!!sym(input$var13))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(four_pi_tbl_1())
+```
+
+### Four Tests Plots - Test 2
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -607,7 +861,50 @@ renderPlotly({
 })
 ```
 
-### Four Post-Injury Tests - Test 3
+### Four Tests Tables - Test 2
+
+```{r, include=FALSE}
+four_pi_tbl_2 <- reactive({
+  four_impact_test %>%
+  group_by_at({{input$var17}}) %>%
+  summarize(Mean = mean(!!sym(input$var14)),
+            SD = sd(!!sym(input$var14)),
+            Min = min(!!sym(input$var14)),
+            Max = max(!!sym(input$var14)),
+            Total = length(!!sym(input$var14))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(four_pi_tbl_2())
+```
+
+
+### Four Tests Plots - Test 3
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -623,7 +920,50 @@ renderPlotly({
 })
 ```
 
-### Four Post-Injury Tests - Test 4
+### Four Tests Tables - Test 3
+
+```{r, include=FALSE}
+four_pi_tbl_3 <- reactive({
+  four_impact_test %>%
+  group_by_at({{input$var17}}) %>%
+  summarize(Mean = mean(!!sym(input$var15)),
+            SD = sd(!!sym(input$var15)),
+            Min = min(!!sym(input$var15)),
+            Max = max(!!sym(input$var15)),
+            Total = length(!!sym(input$var15))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(four_pi_tbl_3())
+```
+
+
+### Four Tests Plots - Test 4
 
 ```{r, include=TRUE}
 renderPlotly({
@@ -638,6 +978,50 @@ renderPlotly({
          y = "")
 })
 ```
+
+### Four Tests Tables - Test 4
+
+```{r, include=FALSE}
+four_pi_tbl_4 <- reactive({
+  four_impact_test %>%
+  group_by_at({{input$var17}}) %>%
+  summarize(Mean = mean(!!sym(input$var16)),
+            SD = sd(!!sym(input$var16)),
+            Min = min(!!sym(input$var16)),
+            Max = max(!!sym(input$var16)),
+            Total = length(!!sym(input$var16))) %>%
+    mutate(Mean = as.numeric(Mean),
+         SD = as.numeric(SD),
+         Min = as.numeric(Min),
+         Max = as.numeric(Max),
+         Total = as.numeric(Total)) %>%
+    arrange(desc(Total)) %>%
+    mutate_if(is.numeric, round, 2) %>%
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+      Mean = colDef(format = colFormat(separators = TRUE)),
+      SD = colDef(format = colFormat(separators = TRUE)),
+      Min = colDef(format = colFormat(separators = TRUE)),
+      Max = colDef(format = colFormat(separators = TRUE)),
+      Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+    )
+  })
+
+```
+
+```{r, include=TRUE}
+renderReactable(four_pi_tbl_4())
+```
+
+
 
 # RTL/RTP by Number of Tests Completed 
 
