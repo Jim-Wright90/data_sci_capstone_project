@@ -288,6 +288,76 @@ rtp_tbl <- reactive({
  renderReactable(rtp_tbl())
 ```
 
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### ImPACT Test Totals
+
+```{r, include=FALSE}
+t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
+                                  "Two Post-Injury Tests",
+                                  "Three Post-Injury Tests",
+                                  "Four Post-Injury Tests"),
+                      "Total" = c(9991,
+                                  5295,
+                                  2228,
+                                  780))
+```
+
+```{r, include=FALSE}
+pi_plot <- ggplot(t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  scale_y_continuous(labels = function(x) format(x, big.mark = ",",
+                                                 scientific = FALSE)) +
+  coord_flip() +
+  labs(x = "",
+       y = "Individuals")
+```
+
+```{r, include=TRUE}
+ggplotly(pi_plot)
+```
+
+### PCSS Item Description
+
+```{r}
+pcss_items %>% 
+  reactable(columns = list(
+    Item = colDef(name = "Item",
+                   align = "center"),
+    Symptom = colDef(name = "Symptom", 
+                   align = "center"),
+    Cluster = colDef(name = "Cluster",
+                     align = "center")),
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE,
+    searchable = TRUE)
+```
+
+### PCSS Symptom Clusters
+
+```{r, include=FALSE}
+head(pcss_cluster)
+
+pcss_cluster_plot <- ggplot(pcss_cluster, aes(fct_reorder(Cluster, `Total Possible Severity Score`),
+                                              `Total Possible Severity Score`)) +
+  geom_col(fill = "blue",
+           alpha = 0.7) +
+  scale_y_continuous(limits = c(0, 30),
+                     breaks = c(0, 5, 10, 15, 20, 25, 30)) +
+  coord_flip() +
+  labs(x = "",
+       y = "Total Possible Severity Score",
+       caption = "Total Possible Severity Score = 132")
+```
+
+```{r, include=TRUE}
+ggplotly(pcss_cluster_plot)
+```
 
 # PCSS Ratings  
 
