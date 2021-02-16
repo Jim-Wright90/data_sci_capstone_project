@@ -40,6 +40,13 @@ theme_set(theme_minimal(15) +
                   panel.grid.minor.x = element_blank(),
                   panel.grid.major.y = element_blank())
           )
+
+
+rsconnect::setAccountInfo(name='jim-wright90', token='98D5B79AF33614CE50E60E07E9FC4220', secret='8m6QD4Yhphu68Mn55ordIfC8+ezzC4rox24xM5YG')
+
+library(rsconnect)
+deployApp()
+#rsconnect::deployApp('path/to/your/app')
 ```
 
 ```{r global, include=FALSE}
@@ -391,7 +398,7 @@ selectInput("var8", "Demographic Variables:",
             choices = c("Gender" = "gender",
                         "Age" = "age_post_injury_1"))
 
-selectInput("var6", "Test 1:",
+selectInput("var6", "Test 1 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
@@ -400,7 +407,7 @@ selectInput("var6", "Test 1:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
 
-selectInput("var7", "Test 2:",
+selectInput("var7", "Test 2 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
@@ -420,7 +427,7 @@ selectInput("var12", "Demographic Variables:",
             choices = c("Gender" = "gender",
                         "Age" = "age_post_injury_1"))
 
-selectInput("var9", "Test 1:",
+selectInput("var9", "Test 1 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
@@ -429,7 +436,7 @@ selectInput("var9", "Test 1:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
 
-selectInput("var10", "Test 2:",
+selectInput("var10", "Test 2 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
@@ -438,7 +445,7 @@ selectInput("var10", "Test 2:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_2",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_2"))
 
-selectInput("var11", "Test 3:",
+selectInput("var11", "Test 3 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_3",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_3",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_3",
@@ -456,7 +463,7 @@ selectInput("var17", "Demographic Variables:",
             choices = c("Gender" = "gender",
                         "Age" = "age_post_injury_1"))
 
-selectInput("var13", "Test 1:",
+selectInput("var13", "Test 1 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_1",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_1",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_1",
@@ -465,7 +472,7 @@ selectInput("var13", "Test 1:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_1",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_1"))
 
-selectInput("var14", "Test 2:",
+selectInput("var14", "Test 2 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_2",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_2",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_2",
@@ -474,7 +481,7 @@ selectInput("var14", "Test 2:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_2",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_2"))
 
-selectInput("var15", "Test 3:",
+selectInput("var15", "Test 3 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_3",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_3",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_3",
@@ -483,7 +490,7 @@ selectInput("var15", "Test 3:",
                         "Vestibular Cluster" = "vestibular_cluster_score_post_injury_3",
                         "Sleep Cluster" = "sleep_cluster_score_post_injury_3"))
 
-selectInput("var16", "Test 4:",
+selectInput("var16", "Test 4 Symptom Cluster:",
             choices = c("Total Sympom Score" = "total_symptom_score_post_injury_4",
                         "Headache-Migraine Cluster" = "headache_migraine_cluster_score_post_injury_4",
                         "Cognitive Cluster" = "cognitive_cluster_score_post_injury_4",
