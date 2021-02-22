@@ -55,6 +55,8 @@ theme_set(theme_minimal(15) +
 ```{r global, include=FALSE}
 # all impact data 
 
+profvis({
+
 impact_all <- read_csv(here("data", "impact_data.csv"))
 
 str(impact_all)
@@ -101,6 +103,8 @@ pcss_items <- import(here("data", "pcss_items.xlsx"),
 
 pcss_cluster <- import(here("data", "cluster_scores.xlsx"),
                setclass = "tbl_df") 
+
+})
 ```
 
 
@@ -112,6 +116,8 @@ Sidebar {.sidebar}
 **SIMS Data Variable Exploration**
 
 ```{r, include=TRUE}
+
+
 selectInput("var1", "Total Concussion Plots:",
             choices = c("Gender" = "gender",
                         "Age" = "age",
@@ -150,6 +156,7 @@ Row {.tabset}
 ```{r}
 # Define inputs 
 
+profvis({
 renderPlotly({
   sims_concussion_data %>%
     ggplot(aes_string(input$var1)) +
@@ -159,6 +166,7 @@ renderPlotly({
     labs(x = "",
          y = "Total Concussions")
 })
+})
 
 
 ```
@@ -166,6 +174,8 @@ renderPlotly({
 ### Concussion Totals 2
 
 ```{r, include=FALSE}
+
+profvis({
 tbl_1 <- reactive({
   sims_concussion_data %>%
   group_by_at({{input$var2}}) %>%
@@ -184,6 +194,7 @@ tbl_1 <- reactive({
     bordered = TRUE
     )
   })
+})
 ```
 
 ```{r, include=TRUE}
@@ -197,6 +208,8 @@ Row {.tabset}
 ### RTL 1
 
 ```{r, include=TRUE}
+
+profvis({
 renderPlotly({
   sims_concussion_data %>% 
     ggplot(aes(dys_btwn_onset_rtp_3)) +
@@ -207,6 +220,7 @@ renderPlotly({
     facet_wrap(input$var1) +
     labs(x = "Days to Complete RTL",
          y = "")
+})
 })
 ```
 
@@ -243,7 +257,9 @@ rtl_tbl <- reactive({
 ```
 
 ```{r, include=TRUE}
+profvis({
  renderReactable(rtl_tbl())
+})
 ```
 
 ### RTP 1
