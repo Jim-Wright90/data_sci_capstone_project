@@ -48,7 +48,7 @@ theme_set(theme_minimal(15) +
 # 
 # library(rsconnect)
 # deployApp()
-# #rsconnect::deployApp('path/to/your/app')
+# rsconnect::deployApp('path/to/your/app')
 ```
 
 
@@ -1562,5 +1562,6 @@ four_impact_rtp_tbl <- reactive({
 ```
 
 ```{r, include=TRUE}
- renderReactable(four_impact_rtp_tbl())
+renderReactable(four_impact_rtp_tbl())
 ```
+
