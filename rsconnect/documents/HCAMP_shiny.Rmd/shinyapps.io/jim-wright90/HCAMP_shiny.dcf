@@ -1,0 +1,13 @@
+name: HCAMP_shiny
+title: HCAMP_shiny
+username:
+account: jim-wright90
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3717112
+bundleId: 4287054
+url: https://jim-wright90.shinyapps.io/HCAMP_shiny/
+when: 1614628180.59225
+asMultiple: FALSE
+asStatic: FALSE
+additionalFiles: data/rtl_description.xlsx|data/rtp_steps.xlsx|data/cluster_scores.xlsx|data/pcss_items.xlsx|data/impact_data.csv|data/four_post_injury_test_impact_sims_merge.csv|data/three_post_injury_test_impact_sims_merge.csv|data/two_post_injury_test_impact_sims_merge.csv|data/one_post_injury_test_impact_sims_merge.csv|data/four_post_injury_impact_test.csv|data/three_post_injury_impact_test.csv|data/two_post_injury_impact_test.csv|data/one_post_injury_impact_test.csv|data/sims_concussion_data.csv

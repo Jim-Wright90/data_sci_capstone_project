@@ -1,13 +1,28 @@
 ---
 title: "Educational Data Science Capstone Project"
-runtime: shiny  
-output: 
+runtime: shiny
+output:
   flexdashboard::flex_dashboard:
     orientation: rows
     social: menu
     source_code: embed
     vertical_layout: scroll
     theme: united
+resource_files:
+- data/rtl_description.xlsx
+- data/rtp_steps.xlsx
+- data/cluster_scores.xlsx
+- data/pcss_items.xlsx
+- data/impact_data.csv
+- data/four_post_injury_test_impact_sims_merge.csv
+- data/three_post_injury_test_impact_sims_merge.csv
+- data/two_post_injury_test_impact_sims_merge.csv
+- data/one_post_injury_test_impact_sims_merge.csv
+- data/four_post_injury_impact_test.csv
+- data/three_post_injury_impact_test.csv
+- data/two_post_injury_impact_test.csv
+- data/one_post_injury_impact_test.csv
+- data/sims_concussion_data.csv
 ---
 
 ```{r setup, include=FALSE}
