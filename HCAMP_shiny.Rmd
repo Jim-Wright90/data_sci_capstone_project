@@ -36,7 +36,7 @@ library(colorblindr)
 library(gghighlight)
 library(forcats)
 library(ggrepel)
-library(gt)
+library(gt) #not sure that you used {gt}; try to only load packages you are using (I didnt check all of them)
 library(knitr)
 library(kableExtra)
 library(reactable)
@@ -45,9 +45,9 @@ library(glue)
 library(fs)
 library(rstatix)
 library(ggpubr)
-library(writexl)
+library(writexl) 
 library(remotes)
-library(profvis)
+library(profvis) 
 
 theme_set(theme_minimal(15) +
             theme(legend.position = "bottom",
@@ -58,38 +58,20 @@ theme_set(theme_minimal(15) +
 
 ```
 
-```{r, include=FALSE}
-# rsconnect::setAccountInfo(name='jim-wright90', token='98D5B79AF33614CE50E60E07E9FC4220', secret='8m6QD4Yhphu68Mn55ordIfC8+ezzC4rox24xM5YG')
-# 
-# library(rsconnect)
-# deployApp()
-# rsconnect::deployApp('path/to/your/app')
-```
-
-
 ```{r global, include=FALSE}
 # all impact data 
-
+# jftn: It doesn't look like you use this impact_all data
 impact_all <- read_csv(here("data", "impact_data.csv"))
-
-str(impact_all)
-
 
 #all clean sims data
 sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
 
-str(sims_concussion_data)
-
 sims_concussion_data <- sims_concussion_data %>% 
   mutate(age = as.factor(age))
-
-str(sims_concussion_data)
 
 #impact data only
 
 one_impact_test <- read_csv(here("data", "one_post_injury_impact_test.csv"))
-
-str(one_impact_test)
 
 two_impact_test <- read_csv(here("data", "two_post_injury_impact_test.csv"))
 
@@ -100,8 +82,6 @@ four_impact_test <- read_csv(here("data", "four_post_injury_impact_test.csv"))
 # impact sims merge data
 
 one_impact_sims <- read_csv(here("data", "one_post_injury_test_impact_sims_merge.csv"))
-
-str(one_impact_sims)
 
 two_impact_sims <- read_csv(here("data", "two_post_injury_test_impact_sims_merge.csv"))
 
@@ -323,10 +303,10 @@ t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
                                   "Two Post-Injury Tests",
                                   "Three Post-Injury Tests",
                                   "Four Post-Injury Tests"),
-                      "Total" = c(9991,
-                                  5295,
-                                  2228,
-                                  780))
+                      "Total" = c(nrow(one_impact_test),
+                                  nrow(two_impact_test),
+                                  nrow(three_impact_test),
+                                  nrow(four_impact_test)))
 ```
 
 ```{r, include=FALSE}
@@ -366,7 +346,6 @@ pcss_items %>%
 ### PCSS Symptom Clusters
 
 ```{r, include=FALSE}
-head(pcss_cluster)
 
 pcss_cluster_plot <- ggplot(pcss_cluster, aes(fct_reorder(Cluster, `Total Possible Severity Score`),
                                               `Total Possible Severity Score`)) +
