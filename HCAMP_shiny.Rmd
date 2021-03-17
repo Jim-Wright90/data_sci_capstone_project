@@ -36,7 +36,6 @@ library(colorblindr)
 library(gghighlight)
 library(forcats)
 library(ggrepel)
-library(gt) #not sure that you used {gt}; try to only load packages you are using (I didnt check all of them)
 library(knitr)
 library(kableExtra)
 library(reactable)
@@ -59,10 +58,6 @@ theme_set(theme_minimal(15) +
 ```
 
 ```{r global, include=FALSE}
-# all impact data 
-# jftn: It doesn't look like you use this impact_all data
-impact_all <- read_csv(here("data", "impact_data.csv"))
-
 #all clean sims data
 sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
 
@@ -136,6 +131,13 @@ selectInput("var3", "RTL/RTP Tables:",
                         "Sport Level" = "level"))
 
 ```
+
+
+**_Data Description:_** The data for this capstone project was provided by the Hawaii Concussion Awareness and Management Program [(HCAMP)](https://hawaiiconcussion.com/), which is an organization affiliated with the University of Hawaii. The mission of HCAMP is to develop evidence-based interventions to manage concussion. 
+
+The specific goal of this project is to explore trends from two data sets. The first data set contains multiple years of test and symptom severity scores from the Immediate Post-Concussion Assessment and Cognitive Testing [(ImPACT)](https://impactconcussion.com/) software. The second data set contains multiple years of return-to-learn (RTL) and return-to-play (RTP) outcome data from the Hawaii Department of Education Student Information Management System (SIMS). The ImPACT data set is utilized to explore trends in symptom severity, as measured by the [Post-Concussion Symptom Scale (PCSS)](tools/Post-Concussion-Symptom-Scale1.pdf), across individuals who completed post-injury testing following their concussion. The ImPACT data set is divided into four smaller data sets to represent individuals who completed one post-injury test, two post-injury tests, three post-injury tests, and four post-injury tests. Specific to this data set, the following research question is explored: Is there a significant difference between PCSS cluster symptom scores during the recovery process? The six symptom clusters used for this project are adapted from Lumba-Brown et al. (2019) and Harmon et al. (2019). 
+
+The SIMS data set is utilized to explore trends in the duration of time to complete RTL and RTP protocols. The ImPACT and SIMS data sets have been joined corresponding to the number of post-injury tests completed from the ImPACT data set. Although the merger of these data sets did not yield a large number of observations to analyze, the following research question is explored: What is the relationship between symptom severity scores and RTL/RTP duration? 
 
 Row {.tabset}
 -----------------------------------------------------------------------
