@@ -1,0 +1,1332 @@
+---
+title: "HCAMP Symptom Cluster Data"
+runtime: shiny
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+    vertical_layout: scroll
+    theme: united
+resource_files:
+- data/rtl_description.xlsx
+- data/rtp_steps.xlsx
+- data/cluster_scores.xlsx
+- data/pcss_items.xlsx
+- data/impact_data.csv
+- data/four_post_injury_test_impact_sims_merge.csv
+- data/three_post_injury_test_impact_sims_merge.csv
+- data/two_post_injury_test_impact_sims_merge.csv
+- data/one_post_injury_test_impact_sims_merge.csv
+- data/four_post_injury_impact_test.csv
+- data/three_post_injury_impact_test.csv
+- data/two_post_injury_impact_test.csv
+- data/one_post_injury_impact_test.csv
+- data/sims_concussion_data.csv
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(flexdashboard)
+library(tidyverse)
+library(here)
+library(janitor)
+library(rio)
+library(colorblindr)
+library(gghighlight)
+library(forcats)
+library(ggrepel)
+library(knitr)
+library(kableExtra)
+library(reactable)
+library(plotly)
+library(glue)
+library(fs)
+library(rstatix)
+library(ggpubr)
+library(writexl) 
+library(remotes)
+library(profvis) 
+library(scales)
+
+theme_set(theme_minimal(15) +
+            theme(legend.position = "bottom",
+                  panel.grid.major.x = element_line(color = "gray60"),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.y = element_blank())
+          )
+
+```
+
+```{r global, include=FALSE}
+#all clean sims data
+sims_concussion_data <- read_csv(here("data", "sims_concussion_data.csv"))
+
+sims_concussion_data <- sims_concussion_data %>% 
+  mutate(age = as.factor(age))
+
+#impact data only
+
+one_impact_test <- read_csv(here("data", "one_post_injury_impact_test.csv"))
+
+two_impact_test <- read_csv(here("data", "two_post_injury_impact_test.csv"))
+
+three_impact_test <- read_csv(here("data", "three_post_injury_impact_test.csv"))
+
+four_impact_test <- read_csv(here("data", "four_post_injury_impact_test.csv"))
+
+# impact sims merge data
+
+one_impact_sims <- read_csv(here("data", "one_post_injury_test_impact_sims_merge.csv"))
+
+two_impact_sims <- read_csv(here("data", "two_post_injury_test_impact_sims_merge.csv"))
+
+three_impact_sims <- read_csv(here("data", "three_post_injury_test_impact_sims_merge.csv"))
+
+four_impact_sims <- read_csv(here("data", "four_post_injury_test_impact_sims_merge.csv"))
+
+# pcss items 
+
+pcss_items <- import(here("data", "pcss_items.xlsx"),
+               setclass = "tbl_df") 
+
+pcss_items_data <- import(here("data", "pcss_items_data.xlsx"),
+               setclass = "tbl_df") 
+
+pcss_cluster <- import(here("data", "cluster_scores.xlsx"),
+               setclass = "tbl_df") 
+```
+
+
+# Symptom Comparisons
+
+Sidebar {.sidebar}
+------------
+
+Symptoms that appear to be rated with higher severity more consistently: 
+
+  1. Headache 
+  2. Difficulty concentrating 
+  3. Difficulty remembering 
+  4. Irritability 
+  5. Light sensitivity 
+  
+Symptoms from the headache-migraine, cognitive and anxiety-mood clusters appear to remain elevated throughout recovery. 
+
+The vestibular cluster symptom of dizziness appears to be rated highest at the time of first testing and lessen in severity across the recovery time. 
+
+```{r, include=FALSE}
+one_impact_test_cluster <- one_impact_test %>% 
+  pivot_longer(
+    cols = c(32:37),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_1_score",
+    names_pattern = "(.*)_score_post_injury_1"
+  ) %>% 
+  select(c(1:8, 37, 38))
+
+one_impact_test_symptoms <- one_impact_test %>% 
+  pivot_longer(
+    cols = c(9:30),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_1_rating",
+    names_pattern = "(.*)_post_injury_1"
+  ) %>% 
+  select(c(1:15, 21, 22))
+
+tst_aov <- aov(total_symptom_score_post_injury_1 ~ post_injury_1_rating,
+               data = one_impact_test_symptoms)
+
+summary(tst_aov)
+
+one_impact_test_symptoms <- left_join(one_impact_test_symptoms, pcss_items_data)
+
+```
+
+```{r, include=FALSE}
+
+two_impact_test_1 <- two_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_1"))
+
+two_impact_test_2 <- two_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_2"))
+
+two_impact_test_1_symptoms <- two_impact_test_1 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_1_rating",
+    names_pattern = "(.*)_post_injury_1"
+  ) %>% 
+  select(-c(14:18))
+
+two_impact_test_1_symptoms <- left_join(two_impact_test_1_symptoms, pcss_items_data)
+
+two_impact_test_2_symptoms <- two_impact_test_2 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_2_rating",
+    names_pattern = "(.*)_post_injury_2"
+  ) %>% 
+  select(-c(14:18))
+
+two_impact_test_2_symptoms <- left_join(two_impact_test_2_symptoms, pcss_items_data)
+
+```
+
+```{r, include=FALSE}
+three_impact_test_1 <- three_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_1"))
+
+three_impact_test_2 <- three_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_2"))
+
+three_impact_test_3 <- three_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_3"))
+
+three_impact_test_1_symptoms <- three_impact_test_1 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_1_rating",
+    names_pattern = "(.*)_post_injury_1"
+  ) %>% 
+  select(-c(14:18))
+
+three_impact_test_1_symptoms <- left_join(three_impact_test_1_symptoms, pcss_items_data)
+
+
+three_impact_test_2_symptoms <- three_impact_test_2 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_2_rating",
+    names_pattern = "(.*)_post_injury_2"
+  ) %>% 
+  select(-c(14:18))
+
+three_impact_test_2_symptoms <- left_join(three_impact_test_2_symptoms, pcss_items_data)
+
+three_impact_test_3_symptoms <- three_impact_test_3 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_3_rating",
+    names_pattern = "(.*)_post_injury_3"
+  ) %>% 
+  select(-c(14:18))
+
+three_impact_test_3_symptoms <- left_join(three_impact_test_3_symptoms, pcss_items_data)
+
+```
+
+```{r, include=FALSE}
+four_impact_test_1 <- four_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_1"))
+
+four_impact_test_2 <- four_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_2"))
+
+four_impact_test_3 <- four_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_3"))
+
+four_impact_test_4 <- four_impact_test %>% 
+  select(passport_id, gender, contains("_post_injury_4"))
+
+four_impact_test_1_symptoms <- four_impact_test_1 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_1_rating",
+    names_pattern = "(.*)_post_injury_1"
+  ) %>% 
+  select(-c(14:18))
+
+four_impact_test_1_symptoms <- left_join(four_impact_test_1_symptoms, pcss_items_data)
+
+
+four_impact_test_2_symptoms <- four_impact_test_2 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_2_rating",
+    names_pattern = "(.*)_post_injury_2"
+  ) %>% 
+  select(-c(14:18))
+
+four_impact_test_2_symptoms <- left_join(four_impact_test_2_symptoms, pcss_items_data)
+
+four_impact_test_3_symptoms <- four_impact_test_3 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_3_rating",
+    names_pattern = "(.*)_post_injury_3"
+  ) %>% 
+  select(-c(14:18))
+
+four_impact_test_3_symptoms <- left_join(four_impact_test_3_symptoms, pcss_items_data)
+
+
+four_impact_test_4_symptoms <- four_impact_test_4 %>% 
+  pivot_longer(
+    cols = c(7:28),
+    names_to = "symptom",
+    names_prefix = "pcss_",
+    values_to = "post_injury_4_rating",
+    names_pattern = "(.*)_post_injury_4"
+  ) %>% 
+  select(-c(14:18))
+
+four_impact_test_4_symptoms <- left_join(four_impact_test_4_symptoms, pcss_items_data)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### One Test 
+
+```{r, include=FALSE}
+all_symptom_tbl <- one_impact_test_symptoms %>% 
+    group_by(gender, cluster, symptom) %>% 
+    summarize(Mean = mean(post_injury_1_rating),
+              SD = sd(post_injury_1_rating),
+              Min = min(post_injury_1_rating),
+              Max = max(post_injury_1_rating),
+              Total = length(post_injury_1_rating)) %>% 
+    mutate(Mean = as.numeric(Mean),
+           SD = as.numeric(SD),
+           Min = as.numeric(Min),
+           Max = as.numeric(Max)) %>% 
+    arrange(desc(Mean)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+        gender = colDef(name = "Gender"),
+        cluster = colDef(name = "Symptom Cluster"),
+        symptom = colDef(name = "Symptom"),
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+      pagination = TRUE,
+      striped = TRUE,
+      outlined = TRUE,
+      compact = TRUE,
+      highlight = TRUE,
+      bordered = TRUE,
+      searchable = TRUE
+    )
+
+symptom_tbl <- function(df, a, b, c, d) {
+    df %>% 
+    group_by({{a}}, {{b}}, {{c}}) %>% 
+    summarize(Mean = mean({{d}}),
+              SD = sd({{d}}),
+              Min = min({{d}}),
+              Max = max({{d}}),
+              Total = length({{d}})) %>% 
+    mutate(Mean = as.numeric(Mean),
+           SD = as.numeric(SD),
+           Min = as.numeric(Min),
+           Max = as.numeric(Max)) %>% 
+    arrange(desc(Mean)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+        gender = colDef(name = "Gender"),
+        cluster = colDef(name = "Symptom Cluster"),
+        symptom = colDef(name = "Symptom"),
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+      pagination = TRUE,
+      striped = TRUE,
+      outlined = TRUE,
+      compact = TRUE,
+      highlight = TRUE,
+      bordered = TRUE,
+      searchable = TRUE
+    )
+}
+
+symptom_tbl_over_three <- function(df, a, b, c, d) {
+    df %>% 
+    group_by({{a}}, {{b}}, {{c}}) %>% 
+    filter({{d}} >=3) %>% 
+    summarize(Mean = mean({{d}}),
+              SD = sd({{d}}),
+              Min = min({{d}}),
+              Max = max({{d}}),
+              Total = length({{d}})) %>% 
+    mutate(Mean = as.numeric(Mean),
+           SD = as.numeric(SD),
+           Min = as.numeric(Min),
+           Max = as.numeric(Max)) %>% 
+    arrange(desc(Mean)) %>% 
+    mutate_if(is.numeric, round, 2) %>% 
+    reactable(
+      defaultColDef = colDef(align = "center"),
+      columns = list(
+        gender = colDef(name = "Gender"),
+        cluster = colDef(name = "Symptom Cluster"),
+        symptom = colDef(name = "Symptom"),
+        Mean = colDef(format = colFormat(separators = TRUE)),
+        SD = colDef(format = colFormat(separators = TRUE)),
+        Min = colDef(format = colFormat(separators = TRUE)),
+        Max = colDef(format = colFormat(separators = TRUE)),
+        Total = colDef(format = colFormat(separators = TRUE, suffix = " concussions"))
+      ),
+      pagination = TRUE,
+      striped = TRUE,
+      outlined = TRUE,
+      compact = TRUE,
+      highlight = TRUE,
+      bordered = TRUE,
+      searchable = TRUE
+    )
+}
+
+```
+
+
+```{r, include=TRUE}
+symptom_tbl(one_impact_test_symptoms, gender, cluster, symptom, post_injury_1_rating)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Two Tests - Test 1
+
+```{r, include=TRUE}
+symptom_tbl(two_impact_test_1_symptoms, gender, cluster, symptom, post_injury_1_rating)
+```
+
+### Two Tests - Test 2 
+
+```{r, include=TRUE}
+symptom_tbl(two_impact_test_2_symptoms, gender, cluster, symptom, post_injury_2_rating)
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Three Tests - Test 1
+
+```{r, include=TRUE}
+symptom_tbl(three_impact_test_1_symptoms, gender, cluster, symptom, post_injury_1_rating)
+```
+
+### Three Tests - Test 2 
+
+```{r, include=TRUE}
+symptom_tbl(three_impact_test_2_symptoms, gender, cluster, symptom, post_injury_2_rating)
+```
+
+### Three Tests - Test 3 
+
+```{r, include=TRUE}
+symptom_tbl(three_impact_test_3_symptoms, gender, cluster, symptom, post_injury_3_rating)
+```
+
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Four Tests - Test 1
+
+```{r, include=TRUE}
+symptom_tbl(four_impact_test_1_symptoms, gender, cluster, symptom, post_injury_1_rating)
+```
+
+### Four Tests - Test 2 
+
+```{r, include=TRUE}
+symptom_tbl(four_impact_test_2_symptoms, gender, cluster, symptom, post_injury_2_rating)
+```
+
+### Four Tests - Test 3
+
+```{r, include=TRUE}
+symptom_tbl(four_impact_test_3_symptoms, gender, cluster, symptom, post_injury_3_rating)
+```
+
+### Four Tests - Test 4
+
+```{r, include=TRUE}
+symptom_tbl(four_impact_test_4_symptoms, gender, cluster, symptom, post_injury_4_rating)
+```
+
+# Cluster Comparisons 
+
+Sidebar {.sidebar}
+------------
+
+Symptom Cluster Potential Symptom Severity Range:
+
+  1. Headache-Migraine Cluster: 0 - 18 (3 symptoms)
+  2. Cognitive Cluster: 0 - 24 (4 symptoms)
+  3. Anxiety-Mood Cluster: 0 - 30 (5 symptoms)
+  4. Ocular-Motor Cluster: 0 - 6 (1 symptom)
+  5. Vestibular Cluster: 0 - 24 (4 symptoms)
+  6. Sleep Cluster: 0 - 30 (5 symptoms)
+  
+  
+  Row {.tabset}
+-----------------------------------------------------------------------
+
+### 1 Test Cluster Summary 
+
+```{r, include=FALSE}
+clusters_one_impact_test <- one_impact_test %>% 
+  select(c(1:8, 32:37)) %>% 
+  mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age = as.character(age))
+
+str(clusters_one_impact_test)
+
+# normalize <- function(x) {
+# return ((x - min(x)) / (max(x) - min(x)))
+# }
+
+rescale01b <- function(x) {
+  if(is.numeric(x)) {
+    z <- na.omit(x)
+    min_z <- min(z)
+    max_z <- max(z)
+    (z - min_z) / (max_z - min_z)
+  }
+  else {
+    return()
+  }
+}
+
+rescale01b(c(0, 5, 10))
+
+clusters_one_impact_test_scaled <- map_df(clusters_one_impact_test, rescale01b)
+
+clusters_one_impact_test_scaled <- bind_cols(clusters_one_impact_test, 
+                                             clusters_one_impact_test_scaled)
+
+clusters_one_impact_test_scaled <- clusters_one_impact_test_scaled %>% 
+  select(-c(9:14))
+
+clusters_one_impact_test_scaled_long <- clusters_one_impact_test_scaled %>% 
+    pivot_longer(
+    cols = c(9:14),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_1_score",
+    names_pattern = "(.*)_score_post_injury_1"
+  ) 
+
+```
+
+```{r, include=FALSE}
+#summary 
+cluster_smry_tbl <- function(df, x) {
+  df %>% 
+  group_by(symptom_cluster) %>% 
+  summarize(mean = mean({{x}}),
+            sd = sd({{x}}),
+            min = min({{x}}),
+            max = max({{x}}),
+            total = length({{x}})) %>%
+  mutate(mean = as.numeric(mean),
+         sd = as.numeric(sd),
+         min = as.numeric(min),
+         max = as.numeric(max),
+         total = as.numeric(total)) %>% 
+  reactable(
+    columns = list(
+      symptom_cluster = colDef(name = "Symptom Cluster",
+                            align = "center"),
+      mean = colDef(name = "Mean",
+                    align = "center",
+                    format = colFormat(digits = 2, separators = TRUE)),
+      sd = colDef(name = "SD",
+                  align = "center",
+                  format = colFormat(digits = 2, separators = TRUE)),
+      min = colDef(name = "Min",
+                   align = "center",
+                   format = colFormat(separators = TRUE)),
+      max = colDef(name = "Max",
+                   align = "center",
+                   format = colFormat(separators = TRUE)),
+      total = colDef(name = "Total",
+                     align = "center",
+                   format = colFormat(separators = TRUE, suffix = " concussions"))),
+    pagination = TRUE,
+    striped = TRUE,
+    outlined = TRUE,
+    compact = TRUE,
+    highlight = TRUE,
+    bordered = TRUE
+  )
+}
+
+cluster_smry_tbl(clusters_one_impact_test_scaled_long, post_injury_1_score)
+```
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_one_impact_test_scaled_long, post_injury_1_score)
+```
+
+### 1 Test Cluster Boxplot 
+
+```{r, include=FALSE}
+cluster_bxp_1 <- ggplot(clusters_one_impact_test_scaled_long,
+                      aes(symptom_cluster, post_injury_1_score)) +
+  geom_boxplot() + 
+  labs(x = "Symptom Cluster",
+       y = "Scaled Severity Score") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 25))
+
+cluster_bxp <- function(df, x, y) {
+  ggplot(df, aes({{x}}, {{y}})) +
+  geom_boxplot() + 
+  labs(x = "Symptom Cluster",
+       y = "Scaled Severity Score") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 25))
+}
+
+cluster_bxp(clusters_one_impact_test_scaled_long, symptom_cluster, post_injury_1_score)
+
+```
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_one_impact_test_scaled_long, symptom_cluster, post_injury_1_score))
+```
+
+### 1 Test Cluster ANOVA 
+
+```{r, include=FALSE}
+cluster_one_test_aov <- aov(post_injury_1_score ~ symptom_cluster, 
+                            data = clusters_one_impact_test_scaled_long)
+
+summary(cluster_one_test_aov)
+
+cluster_one_test_aov
+```
+
+```{r, include=TRUE}
+summary(cluster_one_test_aov)
+```
+
+### 1 Test Cluster PWC
+
+```{r, include=FALSE}
+cluster_one_test_aov_pwc <- clusters_one_impact_test_scaled_long %>% 
+  pairwise_t_test(
+    post_injury_1_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_one_test_aov_pwc <- cluster_one_test_aov_pwc %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_one_test_aov_pwc %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### 2 Tests Cluster Summary - Test 1
+
+```{r, include=FALSE}
+
+clusters_two_impact_test_1 <- two_impact_test %>% 
+  select(c(1:12, contains("_post_injury_1"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2))
+
+clusters_two_impact_test_1 <- clusters_two_impact_test_1 %>% 
+  select(c(1:12, 36:41))
+
+clusters_two_impact_test_1_scaled <- map_df(clusters_two_impact_test_1, rescale01b)
+
+clusters_two_impact_test_1_scaled <- bind_cols(clusters_two_impact_test_1, 
+                                             clusters_two_impact_test_1_scaled)
+
+clusters_two_impact_test_1_scaled <- clusters_two_impact_test_1_scaled %>% 
+  select(-c(13:18))
+
+clusters_two_impact_test_1_long <- clusters_two_impact_test_1_scaled %>% 
+    pivot_longer(
+    cols = c(13:18),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_1_score",
+    names_pattern = "(.*)_score_post_injury_1"
+  ) 
+
+
+clusters_two_impact_test_2 <- two_impact_test %>% 
+  select(c(1:12, contains("_post_injury_2"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2))
+
+clusters_two_impact_test_2 <- clusters_two_impact_test_2 %>% 
+  select(c(1:12, 36:41))
+
+clusters_two_impact_test_2_scaled <- map_df(clusters_two_impact_test_2, rescale01b)
+
+clusters_two_impact_test_2_scaled <- bind_cols(clusters_two_impact_test_2, 
+                                             clusters_two_impact_test_2_scaled)
+
+clusters_two_impact_test_2_scaled <- clusters_two_impact_test_2_scaled %>% 
+  select(-c(13:18))
+
+clusters_two_impact_test_2_long <- clusters_two_impact_test_2_scaled %>% 
+    pivot_longer(
+    cols = c(13:18),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_2_score",
+    names_pattern = "(.*)_score_post_injury_2"
+  ) 
+
+clusters_two_impact_test_complete <- left_join(clusters_two_impact_test_1_long,
+                                               clusters_two_impact_test_2_long)
+```
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_two_impact_test_complete, post_injury_1_score)
+```
+
+### 2 Tests Cluster Boxplot - Test 1
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_two_impact_test_complete, 
+                     symptom_cluster, post_injury_1_score))
+```
+
+### 2 Tests Cluster ANOVA - Test 1
+
+```{r, include=FALSE}
+cluster_two_tests_aov_1 <- aov(post_injury_1_score ~ symptom_cluster, 
+                            data = clusters_two_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_two_tests_aov_1)
+```
+
+### 2 Tests Cluster PWC - Test 1
+
+```{r, include=FALSE}
+cluster_two_tests_aov_pwc_1 <- clusters_two_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_1_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_two_tests_aov_pwc_1 <- cluster_two_tests_aov_pwc_1 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_two_tests_aov_pwc_1 %>% 
+  reactable()
+```
+
+
+### 2 Tests Cluster Summary - Test 2
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_two_impact_test_complete, post_injury_2_score)
+```
+
+### 2 Tests Cluster Boxplot - Test 2
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_two_impact_test_complete, 
+                     symptom_cluster, post_injury_2_score))
+```
+
+### 2 Tests Cluster ANOVA - Test 2
+
+```{r, include=FALSE}
+cluster_two_tests_aov_2 <- aov(post_injury_2_score ~ symptom_cluster, 
+                            data = clusters_two_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_two_tests_aov_2)
+```
+
+### 2 Tests Cluster PWC - Test 2
+
+```{r, include=FALSE}
+cluster_two_tests_aov_pwc_2 <- clusters_two_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_2_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_two_tests_aov_pwc_2 <- cluster_two_tests_aov_pwc_2 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_two_tests_aov_pwc_2 %>% 
+  reactable()
+```
+
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### 3 Tests Cluster Summary - Test 1
+
+```{r, include=FALSE}
+
+clusters_three_impact_test_1 <- three_impact_test %>% 
+  select(c(1:16, contains("_post_injury_1"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3))
+
+clusters_three_impact_test_1 <- clusters_three_impact_test_1 %>% 
+  select(c(1:16, 40:45))
+
+clusters_three_impact_test_1_scaled <- map_df(clusters_three_impact_test_1, rescale01b)
+
+clusters_three_impact_test_1_scaled <- bind_cols(clusters_three_impact_test_1, 
+                                             clusters_three_impact_test_1_scaled)
+
+clusters_three_impact_test_1_scaled <- clusters_three_impact_test_1_scaled %>% 
+  select(-c(17:22))
+
+clusters_three_impact_test_1_long <- clusters_three_impact_test_1_scaled %>% 
+    pivot_longer(
+    cols = c(17:22),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_1_score",
+    names_pattern = "(.*)_score_post_injury_1"
+  ) 
+
+
+clusters_three_impact_test_2 <- three_impact_test %>% 
+  select(c(1:16, contains("_post_injury_2"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3))
+
+clusters_three_impact_test_2 <- clusters_three_impact_test_2 %>% 
+  select(c(1:16, 40:45))
+
+clusters_three_impact_test_2_scaled <- map_df(clusters_three_impact_test_2, rescale01b)
+
+clusters_three_impact_test_2_scaled <- bind_cols(clusters_three_impact_test_2, 
+                                             clusters_three_impact_test_2_scaled)
+
+clusters_three_impact_test_2_scaled <- clusters_three_impact_test_2_scaled %>% 
+  select(-c(17:22))
+
+clusters_three_impact_test_2_long <- clusters_three_impact_test_2_scaled %>% 
+    pivot_longer(
+    cols = c(17:22),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_2_score",
+    names_pattern = "(.*)_score_post_injury_2"
+  ) 
+
+
+clusters_three_impact_test_3 <- three_impact_test %>% 
+  select(c(1:16, contains("_post_injury_3"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3))
+
+clusters_three_impact_test_3 <- clusters_three_impact_test_3 %>% 
+  select(c(1:16, 40:45))
+
+clusters_three_impact_test_3_scaled <- map_df(clusters_three_impact_test_3, rescale01b)
+
+clusters_three_impact_test_3_scaled <- bind_cols(clusters_three_impact_test_3, 
+                                             clusters_three_impact_test_3_scaled)
+
+clusters_three_impact_test_3_scaled <- clusters_three_impact_test_3_scaled %>% 
+  select(-c(17:22))
+
+clusters_three_impact_test_3_long <- clusters_three_impact_test_3_scaled %>% 
+    pivot_longer(
+    cols = c(17:22),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_3_score",
+    names_pattern = "(.*)_score_post_injury_3"
+  ) 
+
+clusters_three_impact_test_join_1 <- left_join(clusters_three_impact_test_1_long,
+                                               clusters_three_impact_test_2_long)
+
+clusters_three_impact_test_complete <- left_join(clusters_three_impact_test_join_1, 
+                                                 clusters_three_impact_test_3_long)
+```
+
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_three_impact_test_complete, post_injury_1_score)
+```
+
+### 3 Tests Cluster Boxplot - Test 1
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_three_impact_test_complete, 
+                     symptom_cluster, post_injury_1_score))
+```
+
+### 3 Tests Cluster ANOVA - Test 1
+
+```{r, include=FALSE}
+cluster_three_tests_aov_1 <- aov(post_injury_1_score ~ symptom_cluster, 
+                            data = clusters_three_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_three_tests_aov_1)
+```
+
+### 3 Tests Cluster PWC - Test 1
+
+```{r, include=FALSE}
+cluster_three_tests_aov_pwc_1 <- clusters_three_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_1_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_three_tests_aov_pwc_1 <- cluster_three_tests_aov_pwc_1 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_three_tests_aov_pwc_1 %>% 
+  reactable()
+```
+
+
+### 3 Tests Cluster Summary - Test 2
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_three_impact_test_complete, post_injury_2_score)
+```
+
+### 3 Tests Cluster Boxplot - Test 2
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_three_impact_test_complete, 
+                     symptom_cluster, post_injury_2_score))
+```
+
+### 3 Tests Cluster ANOVA - Test 2
+
+```{r, include=FALSE}
+cluster_three_tests_aov_2 <- aov(post_injury_2_score ~ symptom_cluster, 
+                            data = clusters_three_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_three_tests_aov_2)
+```
+
+### 3 Tests Cluster PWC - Test 2
+
+```{r, include=FALSE}
+cluster_three_tests_aov_pwc_2 <- clusters_three_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_2_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_three_tests_aov_pwc_2 <- cluster_three_tests_aov_pwc_2 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_three_tests_aov_pwc_2 %>% 
+  reactable()
+```
+
+
+### 3 Tests Cluster Summary - Test 3
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_three_impact_test_complete, post_injury_3_score)
+```
+
+### 3 Tests Cluster Boxplot - Test 3
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_three_impact_test_complete, 
+                     symptom_cluster, post_injury_3_score))
+```
+
+### 3 Tests Cluster ANOVA - Test 3
+
+```{r, include=FALSE}
+cluster_three_tests_aov_3 <- aov(post_injury_3_score ~ symptom_cluster, 
+                            data = clusters_three_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_three_tests_aov_3)
+```
+
+### 3 Tests Cluster PWC - Test 3
+
+```{r, include=FALSE}
+cluster_three_tests_aov_pwc_3 <- clusters_three_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_3_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_three_tests_aov_pwc_3 <- cluster_three_tests_aov_pwc_3 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_three_tests_aov_pwc_3 %>% 
+  reactable()
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### 4 Tests Cluster Summary - Test 1
+
+```{r, include=FALSE}
+
+clusters_four_impact_test_1 <- four_impact_test %>% 
+  select(c(1:20, contains("_post_injury_1"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3),
+         age_post_injury_4 = as.character(age_post_injury_4))
+
+clusters_four_impact_test_1 <- clusters_four_impact_test_1 %>% 
+  select(c(1:20, 44:49))
+
+clusters_four_impact_test_1_scaled <- map_df(clusters_four_impact_test_1, rescale01b)
+
+clusters_four_impact_test_1_scaled <- bind_cols(clusters_four_impact_test_1, 
+                                             clusters_four_impact_test_1_scaled)
+
+clusters_four_impact_test_1_scaled <- clusters_four_impact_test_1_scaled %>% 
+  select(-c(21:26))
+
+clusters_four_impact_test_1_long <- clusters_four_impact_test_1_scaled %>% 
+    pivot_longer(
+    cols = c(21:26),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_1_score",
+    names_pattern = "(.*)_score_post_injury_1"
+  ) 
+
+clusters_four_impact_test_2 <- four_impact_test %>% 
+  select(c(1:20, contains("_post_injury_2"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3),
+         age_post_injury_4 = as.character(age_post_injury_4))
+
+clusters_four_impact_test_2 <- clusters_four_impact_test_2 %>% 
+  select(c(1:20, 44:49))
+
+clusters_four_impact_test_2_scaled <- map_df(clusters_four_impact_test_2, rescale01b)
+
+clusters_four_impact_test_2_scaled <- bind_cols(clusters_four_impact_test_2, 
+                                             clusters_four_impact_test_2_scaled)
+
+clusters_four_impact_test_2_scaled <- clusters_four_impact_test_2_scaled %>% 
+  select(-c(21:26))
+
+clusters_four_impact_test_2_long <- clusters_four_impact_test_2_scaled %>% 
+    pivot_longer(
+    cols = c(21:26),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_2_score",
+    names_pattern = "(.*)_score_post_injury_2"
+  ) 
+
+clusters_four_impact_test_3 <- four_impact_test %>% 
+  select(c(1:20, contains("_post_injury_3"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3),
+         age_post_injury_4 = as.character(age_post_injury_4))
+
+clusters_four_impact_test_3 <- clusters_four_impact_test_3 %>% 
+  select(c(1:20, 44:49))
+
+clusters_four_impact_test_3_scaled <- map_df(clusters_four_impact_test_3, rescale01b)
+
+clusters_four_impact_test_3_scaled <- bind_cols(clusters_four_impact_test_3, 
+                                             clusters_four_impact_test_3_scaled)
+
+clusters_four_impact_test_3_scaled <- clusters_four_impact_test_3_scaled %>% 
+  select(-c(21:26))
+
+clusters_four_impact_test_3_long <- clusters_four_impact_test_3_scaled %>% 
+    pivot_longer(
+    cols = c(21:26),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_3_score",
+    names_pattern = "(.*)_score_post_injury_3"
+  ) 
+
+
+clusters_four_impact_test_4 <- four_impact_test %>% 
+  select(c(1:20, contains("_post_injury_4"))) %>% 
+    mutate(X1 = as.character(X1),
+         row = as.character(row),
+         age_post_injury_1 = as.character(age_post_injury_1),
+         age_post_injury_2 = as.character(age_post_injury_2),
+         age_post_injury_3 = as.character(age_post_injury_3),
+         age_post_injury_4 = as.character(age_post_injury_4))
+
+clusters_four_impact_test_4 <- clusters_four_impact_test_4 %>% 
+  select(c(1:20, 44:49))
+
+clusters_four_impact_test_4_scaled <- map_df(clusters_four_impact_test_4, rescale01b)
+
+clusters_four_impact_test_4_scaled <- bind_cols(clusters_four_impact_test_4, 
+                                             clusters_four_impact_test_4_scaled)
+
+clusters_four_impact_test_4_scaled <- clusters_four_impact_test_4_scaled %>% 
+  select(-c(21:26))
+
+clusters_four_impact_test_4_long <- clusters_four_impact_test_4_scaled %>% 
+    pivot_longer(
+    cols = c(21:26),
+    names_to = "symptom_cluster",
+    values_to = "post_injury_4_score",
+    names_pattern = "(.*)_score_post_injury_4"
+  ) 
+
+
+clusters_four_impact_test_join_1 <- left_join(clusters_four_impact_test_1_long,
+                                               clusters_four_impact_test_2_long)
+
+clusters_four_impact_test_join_2 <- left_join(clusters_four_impact_test_join_1, 
+                                                 clusters_four_impact_test_3_long)
+
+clusters_four_impact_test_complete <- left_join(clusters_four_impact_test_join_2,
+                                                clusters_four_impact_test_4_long)
+```
+
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_four_impact_test_complete, post_injury_1_score)
+```
+
+### 4 Tests Cluster Boxplot - Test 1
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_four_impact_test_complete, 
+                     symptom_cluster, post_injury_1_score))
+```
+
+### 4 Tests Cluster ANOVA - Test 1
+
+```{r, include=FALSE}
+cluster_four_tests_aov_1 <- aov(post_injury_1_score ~ symptom_cluster, 
+                            data = clusters_four_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_four_tests_aov_1)
+```
+
+### 4 Tests Cluster PWC - Test 1
+
+```{r, include=FALSE}
+cluster_four_tests_aov_pwc_1 <- clusters_four_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_1_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_four_tests_aov_pwc_1 <- cluster_four_tests_aov_pwc_1 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_four_tests_aov_pwc_1 %>% 
+  reactable()
+```
+
+
+### 4 Tests Cluster Summary - Test 2
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_four_impact_test_complete, post_injury_2_score)
+```
+
+### 4 Tests Cluster Boxplot - Test 2
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_four_impact_test_complete, 
+                     symptom_cluster, post_injury_2_score))
+```
+
+### 4 Tests Cluster ANOVA - Test 2
+
+```{r, include=FALSE}
+cluster_four_tests_aov_2 <- aov(post_injury_2_score ~ symptom_cluster, 
+                            data = clusters_four_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_four_tests_aov_2)
+```
+
+### 4 Tests Cluster PWC - Test 2
+
+```{r, include=FALSE}
+cluster_four_tests_aov_pwc_2 <- clusters_four_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_2_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_four_tests_aov_pwc_2 <- cluster_four_tests_aov_pwc_2 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_four_tests_aov_pwc_2 %>% 
+  reactable()
+```
+
+
+### 4 Tests Cluster Summary - Test 3
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_four_impact_test_complete, post_injury_3_score)
+```
+
+### 4 Tests Cluster Boxplot - Test 3
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_four_impact_test_complete, 
+                     symptom_cluster, post_injury_3_score))
+```
+
+### 4 Tests Cluster ANOVA - Test 3
+
+```{r, include=FALSE}
+cluster_four_tests_aov_3 <- aov(post_injury_3_score ~ symptom_cluster, 
+                            data = clusters_four_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_four_tests_aov_3)
+```
+
+### 4 Tests Cluster PWC - Test 3
+
+```{r, include=FALSE}
+cluster_four_tests_aov_pwc_3 <- clusters_four_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_3_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_four_tests_aov_pwc_3 <- cluster_four_tests_aov_pwc_3 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_four_tests_aov_pwc_3 %>% 
+  reactable()
+```
+
+
+### 4 Tests Cluster Summary - Test 4
+
+```{r, include=TRUE}
+cluster_smry_tbl(clusters_four_impact_test_complete, post_injury_4_score)
+```
+
+### 4 Tests Cluster Boxplot - Test 4
+
+```{r, include=TRUE}
+ggplotly(cluster_bxp(clusters_four_impact_test_complete, 
+                     symptom_cluster, post_injury_4_score))
+```
+
+### 4 Tests Cluster ANOVA - Test 4
+
+```{r, include=FALSE}
+cluster_four_tests_aov_4 <- aov(post_injury_4_score ~ symptom_cluster, 
+                            data = clusters_four_impact_test_complete)
+```
+
+```{r, include=TRUE}
+summary(cluster_four_tests_aov_4)
+```
+
+### 4 Tests Cluster PWC - Test 4
+
+```{r, include=FALSE}
+cluster_four_tests_aov_pwc_4 <- clusters_four_impact_test_complete %>% 
+  pairwise_t_test(
+    post_injury_4_score ~ symptom_cluster, paired = FALSE,
+    p.adjust.method = "bonferroni"
+  )
+
+cluster_four_tests_aov_pwc_4 <- cluster_four_tests_aov_pwc_4 %>% 
+  mutate_at(vars(p, p.adj), list(~ round(., 2)))
+```
+
+```{r, include=TRUE}
+cluster_four_tests_aov_pwc_4 %>% 
+  reactable()
+```

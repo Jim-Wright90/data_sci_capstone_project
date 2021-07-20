@@ -49,12 +49,57 @@ library(remotes)
 library(profvis) 
 library(scales)
 
-theme_set(theme_minimal(15) +
-            theme(legend.position = "bottom",
-                  panel.grid.major.x = element_line(color = "gray60"),
-                  panel.grid.minor.x = element_blank(),
-                  panel.grid.major.y = element_blank())
-          )
+
+library(RcppArmadillo)
+
+# theme_set(theme_minimal(15) +
+#             theme(legend.position = "bottom",
+#                   panel.grid.major.x = element_line(color = "gray60"),
+#                   panel.grid.minor.x = element_blank(),
+#                   panel.grid.major.y = element_blank())
+#           )
+
+theme_fivethirtyeight <- function(base_size = 15, base_family = "") {
+  theme_grey(base_size = base_size, base_family = base_family) %+replace%
+    theme(
+
+      # Base elements which are not used directly but inherited by others
+      line =              element_line(colour = '#DADADA', size = 0.75,
+                                       linetype = 1, lineend = "butt"),
+      rect =              element_rect(fill = "#F0F0F0", colour = "#F0F0F0",
+                                       size = 0.5, linetype = 1),
+      text =              element_text(family = base_family, face = "plain",
+                                       colour = "#656565", size = base_size,
+                                       hjust = 0.5, vjust = 0.5, angle = 0,
+                                       lineheight = 0.9),
+
+      # Modified inheritance structure of text element
+      plot.title =        element_text(size = rel(1.5), family = '' ,
+                                       face = 'bold', hjust = -0.05,
+                                       vjust = 1.5, colour = '#3B3B3B'),
+      axis.title.x =      element_blank(),
+      axis.title.y =      element_blank(),
+      axis.text =         element_text(),
+
+      # Modified inheritance structure of line element
+      axis.ticks =        element_line(),
+      panel.grid.major =  element_line(),
+      panel.grid.minor =  element_blank(),
+
+      # Modified inheritance structure of rect element
+      plot.background =   element_rect(),
+      panel.background =  element_rect(),
+      legend.key =        element_rect(colour = '#DADADA'),
+
+      # Modifiying legend.position
+      legend.position = 'none',
+
+      complete = TRUE
+    )
+}
+
+
+theme_set(theme_fivethirtyeight())
 
 ```
 
@@ -154,7 +199,7 @@ Row {.tabset}
 renderPlotly({
   sims_concussion_data %>%
     ggplot(aes_string(input$var1)) +
-    geom_bar(fill = "blue",
+    geom_bar(fill = "#772953",
              alpha = 0.7) +
     coord_flip() +
     labs(x = "",
@@ -317,7 +362,7 @@ t_sum_pi <- data.frame("Level" = c("One Post-Injury Test",
 
 ```{r, include=FALSE}
 pi_plot <- ggplot(t_sum_pi, aes(fct_reorder(Level, Total), Total)) +
-  geom_col(fill = "blue",
+  geom_col(fill = "#772953",
            alpha = 0.7) +
   scale_y_continuous(labels = function(x) format(x, big.mark = ",",
                                                  scientific = FALSE)) +
@@ -355,7 +400,7 @@ pcss_items %>%
 
 pcss_cluster_plot <- ggplot(pcss_cluster, aes(fct_reorder(Cluster, `Total Possible Severity Score`),
                                               `Total Possible Severity Score`)) +
-  geom_col(fill = "blue",
+  geom_col(fill = "#772953",
            alpha = 0.7) +
   scale_y_continuous(limits = c(0, 30),
                      breaks = c(0, 5, 10, 15, 20, 25, 30)) +
